@@ -1,3 +1,0 @@
-buildDir/buffer.o: project_exercise8/src/dsp/buffer.c \
- project_exercise8/src/dsp/buffer.h
-project_exercise8/src/dsp/buffer.h:
