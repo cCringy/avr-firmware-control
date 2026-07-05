@@ -13,7 +13,7 @@ OBJS = $(patsubst src/%.c, build/%.o, $(SRCS))
 
 
 build/%.o: src/%.c
-  mkdir -p $(BUILD_DIR) && avr-gcc -mmcu=$(MCU) -DF_CPU=$(F_CPU) -c $< -o $@
+	mkdir -p $(BUILD_DIR) && avr-gcc -mmcu=$(MCU) -DF_CPU=$(F_CPU) -c $< -o $@
 
 main.elf: $(OBJS)
 	avr-gcc -mmcu=$(MCU) -DF_CPU=$(F_CPU) $(OBJS) -o main.elf
@@ -29,6 +29,6 @@ flash: main.hex
 all : main.hex
 
 clean : 
-	rm -rf build $$ rm main.elf main.hex
+	rm -rf build && rm main.elf main.hex
 
 
