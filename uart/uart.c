@@ -16,6 +16,7 @@ static uint8_t uart_last_error = 0;
 uart_operating_mode = 0 : Asynchronous normal mode (U2Xn = 0)
 uart_operating_mode = 1 : Asynchronous double speed mode (U2Xn = 1)
 uart_operating_mode = 2 : Synchronous master mode
+
 */
 
 
@@ -54,7 +55,7 @@ set_stop_bits(uint8_t two_stop_bits){
 void
 set_parity_mode(parity_t * parity){
   // clear previous and set new parity mode
-  UCSR0C &= ~((1<<UPM1) | (1<<UPM0)); 
+  UCSR0C &= ~((1<<UPM1) | (1<<UPM0));
   UCSR0C |= (((((*parity) >> 1) & 1) << UPM1) | (((*parity)  & 1) << UPM0));
 }
 
@@ -67,20 +68,17 @@ uart_init(uart_config_t *config){
   
   switch( config->mode){
 
-    case UART_MODE_ASYNC_NORMAL:
+    case UART_MODE_ASYNC:
 
       UCSR0A &= ~(1 << U2X0);  
 
       UCSR0C &= ~((1<<UMSEL00) | (1<< UMSEL01) | (1<<UCPOL0));
+      if(config->async_mode){UCSR0A |= (1<<U2X0);} 
+      break;
+    case UART_MODE_SYNC:
       
       break;
-    case UART_MODE_ASYNC_DOUBLE:
-      
-      UCSR0A |= (1<<U2X0);
-      // UCPOL0 only for sync so set to 0
-      UCSR0C &= ~((1<<UMSEL00) | (1<< UMSEL01) | (1<<UCPOL0));
-
-      break;
+    case 
     case UART_MODE_SYNC_MASTER:
       
       UCSR0A &= ~(1<<U2X0);

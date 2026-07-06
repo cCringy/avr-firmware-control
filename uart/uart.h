@@ -1,15 +1,15 @@
 #ifndef UART_H
 #define UART_H
 
-#include <stqdint.h>
+#include <stdint.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
 
 typedef enum {
-    UART_MODE_ASYNC_NORMAL = 1,
-    UART_MODE_ASYNC_DOUBLE = 2,
-    UART_MODE_SYNC_MASTER  = 3
+    UART_MODE_ASYNC,
+    UART_MODE_SYNC,
+    UART_MODE_MSPIM
 } uart_mode_t;
 
 typedef enum{
@@ -26,12 +26,20 @@ typedef enum{
   UART_PARITY_ODD      = 0b11
 }parity_t;
 
+typedef enum{
+  MSPIM_SAMPLE_RISING_SETUP_FALLING = 0b00,
+  MSPIM_SAMPLE_RISING_SETUP_FALLING = 0b01,
+  MSPIM_SAMPLE_RISING_SETUP_FALLING = 0b10,
+  MSPIM_SAMPLE_RISING_SETUP_FALLING = 0b11
+}spi_mode_t;
+
 typedef struct {
     uint32_t    baudrate;
     uart_mode_t mode;
     framesize_t framesize;
     parity_t    parity;
     uint8_t     two_stop_bits;
+    spi_mode_t  spi_mode;
 } uart_config_t;
 
 
