@@ -19,7 +19,7 @@ uart_operating_mode = 2 : Synchronous master mode
 
 */
 
-
+// TODO: give every function config pointer ????
 void set_data_frame_size(framesize_t * framesize){
 
   UCSR0B = (UCSR0B & ~(1<<UCSZ02)) | ((((*framesize) >> 2) & 1) << UCSZ02);
@@ -28,14 +28,14 @@ void set_data_frame_size(framesize_t * framesize){
 }
 
 void
-set_baud(uint32_t baudrate,uart_mode_t operating_mode){
+set_baud(uint32_t baudrate,uart_mode_t * operating_mode, uint8_t double_speed){
   uint32_t baud = baudrate ? baudrate : BAUDRATE;
 
   uint16_t ubrrn;
 
-  if(!operating_mode){
+  if(operating_mode == UART_MODE_ASYNC && !double_speed){
     ubrrn  = (F_OSC/ (16*baud)) - 1;
-  }else if( operating_mode == 1){
+  }else if(operating_mode == UART_MODE_ASYNC && double_speed){
     ubrrn  = (F_OSC/ (8*baud)) - 1;
   }else{
     ubrrn  = (F_OSC/ (2*baud)) - 1;
@@ -55,8 +55,8 @@ set_stop_bits(uint8_t two_stop_bits){
 void
 set_parity_mode(parity_t * parity){
   // clear previous and set new parity mode
-  UCSR0C &= ~((1<<UPM1) | (1<<UPM0));
-  UCSR0C |= (((((*parity) >> 1) & 1) << UPM1) | (((*parity)  & 1) << UPM0));
+  UCSR0C &= ~((1<<UPM01) | (1<<UPM00));
+  UCSR0C |= (((((*parity) >> 1) & 1) << UPM01) | (((*parity)  & 1) << UPM00));
 }
 
 void
@@ -66,25 +66,33 @@ uart_init(uart_config_t *config){
 
   cli();
   
-  switch( config->mode){
-
+  switch(config->mode){
     case UART_MODE_ASYNC:
 
-      UCSR0A &= ~(1 << U2X0);  
+      UCSR0A &= ~(1 << U2X0);
 
       UCSR0C &= ~((1<<UMSEL00) | (1<< UMSEL01) | (1<<UCPOL0));
+
       if(config->async_mode){UCSR0A |= (1<<U2X0);} 
       break;
     case UART_MODE_SYNC:
       
-      break;
-    case 
-    case UART_MODE_SYNC_MASTER:
-      
       UCSR0A &= ~(1<<U2X0);
 
       UCSR0C &= ~(1<<UMSEL01);
+      UCSR0C |= (1<<UMSEL00);
 
+      break;
+    case UART_MODE_MSPIM:
+      // WIP
+      UBRR0 = 0;
+
+      DDRD |= (1<<D4);
+ 
+      UCSR0A &= ~(1<<U2X0);
+
+      UCSR0C |= (1<<UMSEL01 ) | (1<<UMSEL00);
+      
       break;
     default:
 
@@ -98,14 +106,13 @@ uart_init(uart_config_t *config){
   // TODO MASTER SPI+
   // TODO UART STATISTICS ( ERROR AND Übertragung)
 
-
-  //Enable Tansmit and Recieve
-  UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
-
   set_parity_mode(&config->parity);
   set_stop_bits(config->two_stop_bits);
   set_data_frame_size(&config->framesize);
-  set_baud(config->baudrate ? config->baudrate : BAUDRATE);
+  set_baud(config->baudrate ? config->baudrate : BAUDRATE,&config->mode);
+
+  //Enable Tansmit and Recieve
+  UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
 
   SREG = sreg_backup;
 }
@@ -116,7 +123,8 @@ uart_reinit(uart_config_t *config){
   sich aufhängen*/
   if (!(UCSR0B & ((1 << RXEN0) | (1 << TXEN0)))) return;
   // Vor Re-Init sicherstellen: kein laufender Transfer, kein ungelesenes RX-Byte
-  while ( !(UCSR0A & (1 << TXC0)) || (UCSR0A & (1 << RXC0)) );
+  uart_flush();
+  while ( !(UCSR0A & (1 << TXC0)));
 
   uart_init(config);
 }
@@ -129,9 +137,9 @@ uart_transmit(uint16_t data){
   
   if(UCSR0B & 1<<UCSZ02){
     /* Copy 9th bit to TXB8 */
-    UCSR0B &= ~(1<<TXB8);
+    UCSR0B &= ~(1<<TXB80);
     if (data & 0x0100){
-      UCSR0B |= (1<<TXB8);
+      UCSR0B |= (1<<TXB80);
     }
   }
   /* Put data into buffer, sends the data */
@@ -190,7 +198,7 @@ uart_clear_error(void){
   uart_last_error=0;
 }
 
-void uart_print(const char str){
+void uart_print(const char * str){
   while(*str){
     uart_transmit((uint8_t)*str++);
   }

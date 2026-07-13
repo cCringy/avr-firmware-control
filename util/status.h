@@ -1,0 +1,6 @@
+typedef enum{
+  STATUS_OK,
+  STATUS_ERR_TIMEOUT,
+  STATUS_ERR_PARAM,
+  STATUS_ERR_CHECKSUM
+}status_t;
