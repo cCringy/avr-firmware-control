@@ -5,6 +5,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
+#include "bsp/board_config.h"
 
 typedef enum {
     UART_MODE_ASYNC,
@@ -26,26 +27,19 @@ typedef enum{
   UART_PARITY_ODD      = 0b11
 }parity_t;
 
+
 typedef enum{
-  MSPIM_SAMPLE_RISING_SETUP_FALLING = 0b00,
-  MSPIM_SAMPLE_RISING_SETUP_FALLING = 0b01,
-  MSPIM_SAMPLE_RISING_SETUP_FALLING = 0b10,
-  MSPIM_SAMPLE_RISING_SETUP_FALLING = 0b11
+  SPI_MODE_0 = 0b00,  // UCPHA=0, UCPOL=0
+  SPI_MODE_1 = 0b01,  // UCPHA=1, UCPOL=0
+  SPI_MODE_2 = 0b10,  // UCPHA=0, UCPOL=1
+  SPI_MODE_3 = 0b11   // UCPHA=1, UCPOL=1
 }spi_mode_t;
 
-typedef struct {
-    uint32_t    baudrate;
-    uart_mode_t mode;
-    framesize_t framesize;
-    parity_t    parity;
-    uint8_t     two_stop_bits;
-    spi_mode_t  spi_mode;
-} uart_config_t;
 
-
-void    uart_init(uint32_t baudrate, uart_mode_t mode);
-void    uart_transmit(uint8_t data);
+void uart_init(uart_config_t *config);
+void uart_transmit(uint16_t data); 
 uint8_t uart_receive(void);
+
 uint8_t uart_data_available(void);
 void    uart_print(const char *str);
 

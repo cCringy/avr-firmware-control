@@ -2,13 +2,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
+#include "bsp/board_config.h"
 
-// Conservative Indusrty Standard
-// slow enough for bad cables and fast enough for this usecase
-
-#define BAUDRATE 9600UL  /*UL because if normal int on Arduino it will use 16 bit arithmetic
-                         causing integer overflow*/
-#define F_OSC 16000000UL
+#define uart_transmit(data) _Generic((data),\
+                              uint8_t : uart_transmit8,\
+                              uint16_t: uart_transmit9\
+                            )(data)
 
 static uint8_t uart_last_error = 0;
 
@@ -28,17 +27,17 @@ void set_data_frame_size(framesize_t * framesize){
 }
 
 void
-set_baud(uint32_t baudrate,uart_mode_t * operating_mode, uint8_t double_speed){
-  uint32_t baud = baudrate ? baudrate : BAUDRATE;
+set_baud(uart_config_t * config){
+  uint32_t baud = config->baudrate ? config->baudrate : BAUDRATE;
 
   uint16_t ubrrn;
 
-  if(operating_mode == UART_MODE_ASYNC && !double_speed){
-    ubrrn  = (F_OSC/ (16*baud)) - 1;
-  }else if(operating_mode == UART_MODE_ASYNC && double_speed){
-    ubrrn  = (F_OSC/ (8*baud)) - 1;
+  if(config->mode == UART_MODE_ASYNC && !config->async_double_speed){
+    ubrrn  = (F_CPU/ (16*baud)) - 1;
+  }else if(config->mode == UART_MODE_ASYNC && config->async_double_speed){
+    ubrrn  = (F_CPU/ (8*baud)) - 1;
   }else{
-    ubrrn  = (F_OSC/ (2*baud)) - 1;
+    ubrrn  = (F_CPU/ (2*baud)) - 1;
   }
 
   UBRR0H = ubrrn >> 8;
@@ -73,7 +72,7 @@ uart_init(uart_config_t *config){
 
       UCSR0C &= ~((1<<UMSEL00) | (1<< UMSEL01) | (1<<UCPOL0));
 
-      if(config->async_mode){UCSR0A |= (1<<U2X0);} 
+      if(config->async_double_speed) UCSR0A |= (1<<U2X0);
       break;
     case UART_MODE_SYNC:
       
@@ -87,7 +86,7 @@ uart_init(uart_config_t *config){
       // WIP
       UBRR0 = 0;
 
-      DDRD |= (1<<D4);
+      DDRD |= (1<<XCK);//set XCK output mode
  
       UCSR0A &= ~(1<<U2X0);
 
@@ -109,7 +108,7 @@ uart_init(uart_config_t *config){
   set_parity_mode(&config->parity);
   set_stop_bits(config->two_stop_bits);
   set_data_frame_size(&config->framesize);
-  set_baud(config->baudrate ? config->baudrate : BAUDRATE,&config->mode);
+  set_baud(config);
 
   //Enable Tansmit and Recieve
   UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
@@ -129,21 +128,55 @@ uart_reinit(uart_config_t *config){
   uart_init(config);
 }
 
-void
-uart_transmit(uint16_t data){
-  /* Wait for empty transmit buffer */
-  while (!(UCSR0A & (1<<UDRE0)));
+// void
+// uart_transmit(uint16_t data){
+//   /* Wait for empty transmit buffer */
+//   while (!(UCSR0A & (1<<UDRE0)));
   
   
-  if(UCSR0B & 1<<UCSZ02){
-    /* Copy 9th bit to TXB8 */
-    UCSR0B &= ~(1<<TXB80);
-    if (data & 0x0100){
-      UCSR0B |= (1<<TXB80);
-    }
-  }
-  /* Put data into buffer, sends the data */
-  UDR0 = (uint8_t) data;
+//   if(UCSR0B & 1<<UCSZ02){
+//     /* Copy 9th bit to TXB8 */
+//     UCSR0B &= ~(1<<TXB80);
+//     if (data & 0x0100){
+//       UCSR0B |= (1<<TXB80);
+//     }
+//   }
+//   /* Put data into buffer, sends the data */
+//   UCSR0A |= (1<<TXC0);
+//   UDR0 = (uint8_t) data;
+// }
+
+/* Überträgt Daten im 5- bis 8-Bit-UART-Modus */
+void uart_transmit8(uint8_t data)
+{
+    /* Warten bis Sendepuffer frei ist */
+    while (!(UCSR0A & (1 << UDRE0)));
+
+    /* TX Complete Flag löschen */
+    UCSR0A |= (1 << TXC0);
+
+    /* Daten senden */
+    UDR0 = data;
+}
+
+
+/* Überträgt Daten im 9-Bit-UART-Modus */
+void uart_transmit9(uint16_t data)
+{
+    /* Warten bis Sendepuffer frei ist */
+    while (!(UCSR0A & (1 << UDRE0)));
+
+    /* 9. Bit setzen oder löschen */
+    if (data & 0x0100)
+        UCSR0B |= (1 << TXB80);
+    else
+        UCSR0B &= ~(1 << TXB80);
+
+    /* TX Complete Flag löschen */
+    UCSR0A |= (1 << TXC0);
+
+    /* Untere 8 Bit senden */
+    UDR0 = (uint8_t)data;
 }
 
 uint8_t 
