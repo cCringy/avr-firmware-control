@@ -16,16 +16,7 @@ Konstant um Race Conditions vorzubeugen, da Module nur von Config lesen
 Und sorgt für bessere Kapselung
 */
 
-typedef struct {
-    uint32_t    baudrate;
-    uart_mode_t mode;
-    framesize_t framesize;
-    parity_t    parity;
-    uint8_t     two_stop_bits;
-    uint8_t     async_double_speed;
-    spi_mode_t  spi_mode;
 
-} uart_config_t;
 
 const config_t* board_config(void);
 

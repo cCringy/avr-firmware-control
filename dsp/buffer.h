@@ -9,7 +9,7 @@
 typedef struct buffer buffer;   // buffer instance representation (opaque record)
 typedef buffer* buffer_t;       // handle to buffer instance (opaque pointer)
 typedef uint16_t item_t;        // value type stored in buffer instance
-
+n 
 buffer_t buffer_create(uint16_t buffer_size);   // constructor
 void buffer_delete(buffer_t* buffer);           // destructor
 

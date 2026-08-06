@@ -5,6 +5,10 @@ PROGRAMMER_ARGS = -P COM9
 BUILD_DIR = build
 AVRDUDE = avrdude
 
+UART_FRAMESIZE ?= 8
+
+CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -DUART_FRAMESIZE=$(UART_FRAMESIZE)
+
 #src/main.o  src/scheduler.o  build/task.o
 SRCS = $(wildcard src/*.c)
 #build/main.o  build/scheduler.o  build/task.o
@@ -13,10 +17,10 @@ OBJS = $(patsubst src/%.c, build/%.o, $(SRCS))
 
 
 build/%.o: src/%.c
-	mkdir -p $(BUILD_DIR) && avr-gcc -mmcu=$(MCU) -DF_CPU=$(F_CPU) -c $< -o $@
+	mkdir -p $(BUILD_DIR) && avr-gcc $(CFLAGS) -c $< -o $@
 
 main.elf: $(OBJS)
-	avr-gcc -mmcu=$(MCU) -DF_CPU=$(F_CPU) $(OBJS) -o main.elf
+	avr-gcc $(CFLAGS) $(OBJS) -o main.elf
 
 main.hex: main.elf
 	avr-objcopy -O ihex -R .eeprom main.elf main.hex

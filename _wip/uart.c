@@ -1,13 +1,8 @@
 #include "uart.h"
+#include "uart_internal.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
-#include "bsp/board_config.h"
-
-#define uart_transmit(data) _Generic((data),\
-                              uint8_t : uart_transmit8,\
-                              uint16_t: uart_transmit9\
-                            )(data)
 
 static uint8_t uart_last_error = 0;
 
@@ -18,13 +13,21 @@ uart_operating_mode = 2 : Synchronous master mode
 
 */
 
-// TODO: give every function config pointer ????
+
 void set_data_frame_size(framesize_t * framesize){
 
   UCSR0B = (UCSR0B & ~(1<<UCSZ02)) | ((((*framesize) >> 2) & 1) << UCSZ02);
   UCSR0C = (UCSR0C & ~((1<<UCSZ01)|(1<<UCSZ00))) | (((*framesize) & 0x03) << UCSZ00);
 
 }
+
+#if UART_FRAMESIZE == 9
+  void uart_transmit(uint16_t data) { uart_transmit9(data); }
+  uint16_t uart_receive(void)       { return uart_receive9(); }
+#else
+  void uart_transmit(uint8_t data) { uart_transmit8(data); }
+  uint8_t uart_receive(void)       { return uart_receive8(); }
+#endif
 
 void
 set_baud(uart_config_t * config){
@@ -180,7 +183,7 @@ void uart_transmit9(uint16_t data)
 }
 
 uint8_t 
-uart_receive(void){
+uart_receive8(void){
   /* Wait for data to be received */
   while (!(UCSR0A & (1<<RXC0)));
 
@@ -193,7 +196,7 @@ uart_receive(void){
 }
 
 uint16_t 
-uart_receive_9bit(void){
+uart_receive9(void){
 
   while (!(UCSR0A & (1<<RXC0)));
 
@@ -212,7 +215,7 @@ void uart_flush(void) {
     while (UCSR0A & (1 << RXC0)) {
         dummy = UDR0;  // auslesen und wegwerfen
     }
-    (void)dummy;  // suppress unused warning
+    (void)dummy;
 }
 
 uint8_t

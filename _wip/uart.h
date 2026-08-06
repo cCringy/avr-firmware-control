@@ -2,10 +2,6 @@
 #define UART_H
 
 #include <stdint.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdint.h>
-#include "bsp/board_config.h"
 
 typedef enum {
     UART_MODE_ASYNC,
@@ -35,8 +31,19 @@ typedef enum{
   SPI_MODE_3 = 0b11   // UCPHA=1, UCPOL=1
 }spi_mode_t;
 
+typedef struct {
+    uint32_t    baudrate;
+    uart_mode_t mode;
+    framesize_t framesize;
+    parity_t    parity;
+    uint8_t     two_stop_bits;
+    uint8_t     async_double_speed;
+    spi_mode_t  spi_mode;
+
+} uart_config_t;
 
 void uart_init(uart_config_t *config);
+void uart_reinit(uart_config_t *config);
 void uart_transmit(uint16_t data); 
 uint8_t uart_receive(void);
 
