@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 
+#ifndef UART_FRAMESIZE
+  #error "UART_FRAMESIZE must be defined by Build-System"
+#endif
+
 typedef enum {
     UART_MODE_ASYNC,
     UART_MODE_SYNC,
@@ -44,10 +48,19 @@ typedef struct {
 
 void uart_init(uart_config_t *config);
 void uart_reinit(uart_config_t *config);
-void uart_transmit(uint16_t data); 
-uint8_t uart_receive(void);
+#if UART_FRAMESIZE == 9
+  void     uart_transmit(uint16_t data);
+  uint16_t uart_receive(void);
+#else
+  void     uart_transmit(uint8_t data);
+  uint8_t  uart_receive(void);
+#endif
 
+void    uart_flush(void);
 uint8_t uart_data_available(void);
 void    uart_print(const char *str);
+
+uint8_t uart_get_error(void);
+void    uart_clear_error(void);
 
 #endif

@@ -1,5 +1,6 @@
 #ifndef UART_INTERNAL_H
 #define UART_INTERNAL_H
+
 #include <stdint.h>
 
 void     uart_transmit8(uint8_t data);
