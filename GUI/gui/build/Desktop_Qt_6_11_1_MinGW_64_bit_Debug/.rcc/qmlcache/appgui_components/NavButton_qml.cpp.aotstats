@@ -1,0 +1,15 @@
+{
+    "formatRevision": 1,
+    "modules": [
+        {
+            "moduleFiles": [
+                {
+                    "entries": [
+                    ],
+                    "filePath": "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/NavButton.qml"
+                }
+            ],
+            "moduleId": "gui(appgui)"
+        }
+    ]
+}

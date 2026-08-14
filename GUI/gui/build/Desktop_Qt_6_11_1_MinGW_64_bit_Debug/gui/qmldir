@@ -1,0 +1,8 @@
+module gui
+typeinfo appgui.qmltypes
+prefer :/qt/qml/gui/
+Main 1.0 Main.qml
+NavButton 1.0 NavButton.qml
+NavBar 1.0 components/NavBar.qml
+depends QtQuick
+

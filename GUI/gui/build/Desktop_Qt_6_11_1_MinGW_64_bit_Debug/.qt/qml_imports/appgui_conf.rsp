@@ -1,0 +1,16 @@
+-rootPath
+C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui
+-cmake-output
+-output-file
+C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/qml_imports/appgui_conf.cmake
+-importPath
+C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug
+-importPath
+C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui
+-importPath
+D:/Qt/6.11.1/mingw_64/qml
+-qrcFiles
+C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/qmake_gui.qrc
+C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0.qrc
+C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_res_0.qrc
+C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc

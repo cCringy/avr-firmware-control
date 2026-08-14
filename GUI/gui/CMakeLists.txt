@@ -1,0 +1,54 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(gui VERSION 0.1 LANGUAGES CXX)
+
+find_package(Qt6 REQUIRED COMPONENTS Quick)
+
+qt_standard_project_setup(REQUIRES 6.10)
+
+# Content of downloaded design from Figma to Qt or similar
+if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/importedcontent/CMakeLists.txt")
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/importedcontent)
+endif()
+
+qt_add_executable(appgui
+    main.cpp
+)
+
+# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+# If you are developing for iOS or macOS you should consider setting an
+# explicit, fixed bundle identifier manually though.
+set_target_properties(appgui PROPERTIES
+#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appgui
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+set_source_files_properties(components/NavButton.qml
+    PROPERTIES QT_RESOURCE_ALIAS NavButton.qml
+)
+
+qt_add_qml_module(appgui
+    URI gui
+    VERSION 1.0
+    QML_FILES
+        Main.qml
+        components/NavButton.qml
+    RESOURCES
+        images/app_icon.png
+        SOURCES
+        QML_FILES components/NavButton.qml
+        QML_FILES components/NavBar.qml
+)
+
+target_link_libraries(appgui
+    PRIVATE Qt6::Quick
+)
+
+install(TARGETS appgui
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/gui/">
+    <file alias="Components/qmldir">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/components/qmldir</file>
+  </qresource>
+</RCC>
+

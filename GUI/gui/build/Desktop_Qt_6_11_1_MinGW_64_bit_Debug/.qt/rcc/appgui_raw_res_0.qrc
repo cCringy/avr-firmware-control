@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/qt/qml/gui/">
+    <file alias="images/app_icon.png">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/app_icon.png</file>
+  </qresource>
+</RCC>
+
