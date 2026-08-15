@@ -12,7 +12,7 @@ namespace _qt_qml_gui_Main_qml {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
-namespace _qt_qml_gui_NavButton_qml { 
+namespace _qt_qml_gui_components_NavButton_qml { 
     extern const unsigned char qmlData[];
     extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
     const QQmlPrivate::CachedQmlUnit unit = {
@@ -41,7 +41,7 @@ Q_GLOBAL_STATIC(Registry, unitRegistry)
 
 Registry::Registry() {
     resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/gui/Main.qml"), &QmlCacheGeneratedCode::_qt_qml_gui_Main_qml::unit);
-    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/gui/NavButton.qml"), &QmlCacheGeneratedCode::_qt_qml_gui_NavButton_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/gui/components/NavButton.qml"), &QmlCacheGeneratedCode::_qt_qml_gui_components_NavButton_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/gui/components/NavBar.qml"), &QmlCacheGeneratedCode::_qt_qml_gui_components_NavBar_qml::unit);
     QQmlPrivate::RegisterQmlUnitCacheHook registration;
     registration.structVersion = 0;

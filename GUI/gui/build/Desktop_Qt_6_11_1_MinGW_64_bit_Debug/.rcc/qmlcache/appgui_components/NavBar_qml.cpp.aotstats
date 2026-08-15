@@ -6,52 +6,44 @@
                 {
                     "entries": [
                         {
-                            "codegenResult": 0,
-                            "column": 16,
-                            "durationMicroseconds": 12000,
-                            "functionName": "color",
-                            "line": 19,
-                            "message": ""
-                        },
-                        {
-                            "codegenResult": 0,
-                            "column": 15,
-                            "durationMicroseconds": 0,
-                            "functionName": "text",
-                            "line": 29,
-                            "message": ""
-                        },
-                        {
-                            "codegenResult": 0,
-                            "column": 16,
-                            "durationMicroseconds": 0,
-                            "functionName": "color",
-                            "line": 30,
-                            "message": ""
-                        },
-                        {
-                            "codegenResult": 0,
-                            "column": 30,
-                            "durationMicroseconds": 0,
-                            "functionName": "horizontalAlignment",
-                            "line": 33,
-                            "message": ""
-                        },
-                        {
-                            "codegenResult": 0,
+                            "codegenResult": 2,
                             "column": 28,
                             "durationMicroseconds": 0,
-                            "functionName": "verticalAlignment",
-                            "line": 34,
-                            "message": ""
+                            "functionName": "preferredWidth",
+                            "line": 14,
+                            "message": "Cannot access value for name window"
                         },
                         {
                             "codegenResult": 0,
-                            "column": 20,
+                            "column": 23,
                             "durationMicroseconds": 0,
-                            "functionName": "bold",
-                            "line": 32,
+                            "functionName": "fill",
+                            "line": 18,
                             "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 23,
+                            "durationMicroseconds": 0,
+                            "functionName": "text",
+                            "line": 27,
+                            "message": "Could not find property \"text\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 26,
+                            "durationMicroseconds": 0,
+                            "functionName": "checked",
+                            "line": 28,
+                            "message": "Could not find property \"checked\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 28,
+                            "durationMicroseconds": 0,
+                            "functionName": "onClicked",
+                            "line": 29,
+                            "message": "Could not find signal \"clicked\"."
                         }
                     ],
                     "filePath": "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/NavBar.qml"

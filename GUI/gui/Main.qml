@@ -10,6 +10,7 @@ ApplicationWindow {
     minimumWidth: 200
     minimumHeight: 250
     visible: true
+
     title: qsTr("AVR Firmware Controlpanel")
 
     GridLayout {
@@ -20,13 +21,23 @@ ApplicationWindow {
 
         // --- Navbar ---
         NavBar{
+            id: navBar
+            tabs: ["Pinout","ADC","UART"]
+
+            Connections {
+                target: navBar
+
+                function onItemSelected(index){
+                    stack.currentIndex = index
+                }
+            }
         }
         // --- Content-Bereich ---
         StackLayout {
             id: stack
             Layout.fillWidth: true
             Layout.fillHeight: true
-            currentIndex: 0
+            currentIndex: navBar.selectedIndex
 
             Rectangle {
                 color: "#2c2c2c"

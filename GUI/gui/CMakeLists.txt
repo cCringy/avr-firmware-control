@@ -26,21 +26,16 @@ set_target_properties(appgui PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-set_source_files_properties(components/NavButton.qml
-    PROPERTIES QT_RESOURCE_ALIAS NavButton.qml
-)
-
 qt_add_qml_module(appgui
     URI gui
     VERSION 1.0
     QML_FILES
         Main.qml
         components/NavButton.qml
+        components/NavBar.qml
     RESOURCES
         images/app_icon.png
         SOURCES
-        QML_FILES components/NavButton.qml
-        QML_FILES components/NavBar.qml
 )
 
 target_link_libraries(appgui

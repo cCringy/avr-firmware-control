@@ -10,63 +10,39 @@
                             "column": 23,
                             "durationMicroseconds": 0,
                             "functionName": "fill",
-                            "line": 19,
-                            "message": ""
-                        },
-                        {
-                            "codegenResult": 0,
-                            "column": 36,
-                            "durationMicroseconds": 0,
-                            "functionName": "preferredWidth",
-                            "line": 25,
-                            "message": ""
-                        },
-                        {
-                            "codegenResult": 0,
-                            "column": 31,
-                            "durationMicroseconds": 0,
-                            "functionName": "fill",
-                            "line": 30,
+                            "line": 20,
                             "message": ""
                         },
                         {
                             "codegenResult": 2,
-                            "column": 28,
+                            "column": 19,
                             "durationMicroseconds": 0,
-                            "functionName": "model",
-                            "line": 35,
+                            "functionName": "tabs",
+                            "line": 25,
                             "message": "Cannot generate efficient code for storing an array in a non-sequence type"
                         },
                         {
-                            "codegenResult": 2,
-                            "column": 31,
+                            "codegenResult": 0,
+                            "column": 25,
                             "durationMicroseconds": 0,
-                            "functionName": "text",
-                            "line": 38,
-                            "message": "Could not find property \"text\"."
+                            "functionName": "target",
+                            "line": 28,
+                            "message": ""
                         },
                         {
                             "codegenResult": 2,
-                            "column": 34,
+                            "column": 17,
                             "durationMicroseconds": 0,
-                            "functionName": "checked",
-                            "line": 39,
-                            "message": "Could not find property \"checked\"."
+                            "functionName": "onItemSelected",
+                            "line": 30,
+                            "message": "Functions without type annotations won't be compiled"
                         },
                         {
-                            "codegenResult": 2,
-                            "column": 36,
+                            "codegenResult": 0,
+                            "column": 27,
                             "durationMicroseconds": 0,
-                            "functionName": "onClicked",
+                            "functionName": "currentIndex",
                             "line": 40,
-                            "message": "Could not find signal \"clicked\"."
-                        },
-                        {
-                            "codegenResult": 0,
-                            "column": 39,
-                            "durationMicroseconds": 0,
-                            "functionName": "centerIn",
-                            "line": 55,
                             "message": ""
                         },
                         {
@@ -74,7 +50,7 @@
                             "column": 39,
                             "durationMicroseconds": 0,
                             "functionName": "centerIn",
-                            "line": 63,
+                            "line": 45,
                             "message": ""
                         },
                         {
@@ -82,7 +58,15 @@
                             "column": 39,
                             "durationMicroseconds": 0,
                             "functionName": "centerIn",
-                            "line": 71,
+                            "line": 53,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 39,
+                            "durationMicroseconds": 0,
+                            "functionName": "centerIn",
+                            "line": 61,
                             "message": ""
                         }
                     ],

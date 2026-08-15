@@ -10,6 +10,7 @@ ApplicationWindow {
     minimumWidth: 200
     minimumHeight: 250
     visible: true
+
     title: qsTr("AVR Firmware Controlpanel")
 
     GridLayout {
@@ -19,26 +20,15 @@ ApplicationWindow {
         anchors.fill: parent
 
         // --- Navbar ---
-        Rectangle {
-            id: navbar
-            Layout.fillHeight: true
-            Layout.preferredWidth: Math.max(75, window.width * 0.1)
-            color: "#1e1e2e"
-            z: 50
+        NavBar{
+            id: navBar
+            tabs: ["Pinout","ADC","UART"]
 
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 10
-                spacing: 10
+            Connections {
+                target: navBar
 
-                Repeater {
-                    model: ["Pinout", "ADC", "UART"]
-
-                    NavButton {
-                        text: modelData
-                        checked: stack.currentIndex === index
-                        onClicked: stack.currentIndex = index
-                    }
+                function onItemSelected(index){
+                    stack.currentIndex = index
                 }
             }
         }
@@ -47,7 +37,7 @@ ApplicationWindow {
             id: stack
             Layout.fillWidth: true
             Layout.fillHeight: true
-            currentIndex: 0
+            currentIndex: navBar.selectedIndex
 
             Rectangle {
                 color: "#2c2c2c"

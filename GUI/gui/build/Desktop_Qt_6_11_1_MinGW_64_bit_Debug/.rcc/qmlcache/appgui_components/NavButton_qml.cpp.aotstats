@@ -5,6 +5,14 @@
             "moduleFiles": [
                 {
                     "entries": [
+                        {
+                            "codegenResult": 2,
+                            "column": 16,
+                            "durationMicroseconds": 0,
+                            "functionName": "color",
+                            "line": 18,
+                            "message": "Cannot access value for name root"
+                        }
                     ],
                     "filePath": "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/NavButton.qml"
                 }

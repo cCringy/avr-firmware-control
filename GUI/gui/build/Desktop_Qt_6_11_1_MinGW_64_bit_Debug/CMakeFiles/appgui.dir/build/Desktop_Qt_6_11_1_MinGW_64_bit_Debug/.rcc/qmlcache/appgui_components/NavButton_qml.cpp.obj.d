@@ -366,4 +366,16 @@ CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/a
  D:/Qt/6.11.1/mingw_64/include/QtCore/qversionnumber.h \
  D:/Qt/6.11.1/mingw_64/include/QtCore/qspan.h \
  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cassert \
- D:/Qt/6.11.1/mingw_64/include/QtCore/q20iterator.h
+ D:/Qt/6.11.1/mingw_64/include/QtCore/q20iterator.h \
+ D:/Qt/6.11.1/mingw_64/include/QtCore/qtimezone.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qjsengine.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qjsmanagedvalue.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqmldebug.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlcomponent.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqml.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlregistration.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQmlIntegration/qqmlintegration.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlerror.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlcontext.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlengine.h \
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlabstracturlinterceptor.h

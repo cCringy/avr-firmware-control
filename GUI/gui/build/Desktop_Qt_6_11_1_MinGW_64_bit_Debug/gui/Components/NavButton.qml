@@ -1,23 +1,23 @@
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls.Basic
+import QtQuick.Controls
 
-Button {
-    id: control
-    Layout.fillWidth: true
-    Layout.preferredHeight: 40
+Button{
+    id : root
 
-    checkable: true
+    property color color_normal  : "#2D3250"
+    property color color_hovered : "#7077A1"
+    property color color_checked : "#F6B17A"
+    property color color_pressed : "#F6B17A"
 
-    background: Rectangle {
-        color: control.checked ? "#3a3a5c" : "#1e1e2e"
-        radius: 6
-    }
+    checkable : true
 
-    contentItem: Text {
-        text: control.text
-        color: control.checked ? "white" : "#a0a0a0"
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+    background: Rectangle{
+        topRightRadius: 12
+        bottomRightRadius: 12
+
+        color: root.checked ? color_checked
+             : root.pressed ? color_pressed
+             : root.hovered ? color_hovered
+             : color_normal
     }
 }

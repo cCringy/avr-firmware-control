@@ -2,35 +2,35 @@ import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
 
-Button {
-    id: control
+Rectangle {
+    id: root
 
-    Layout.fillWidth: true
-    Layout.preferredHeight: 40
+    property alias tabs: buttons.model
+    property int selectedIndex: 0
 
-    property color normalColor: "transparent"
-    property color hoverColor: "#2a2a3d"
-    property color checkedColor: "#3d3d5c"
-    property color normalTextColor: "#a0a0b0"
-    property color checkedTextColor: "white"
+    signal itemSelected(int index)
 
-    background: Rectangle {
-        radius: 6
-        color: control.checked
-               ? control.checkedColor
-               : (control.hovered ? control.hoverColor : control.normalColor)
+    Layout.fillHeight: true
+    Layout.preferredWidth: Math.max(75, window.width * 0.1)
+    z: 50
 
-        Behavior on color {
-            ColorAnimation { duration: 120 }
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 10
+        spacing: 10
+
+        Repeater {
+            id : buttons
+
+            NavButton {
+                Layout.fillWidth: true
+                text: modelData
+                checked: root.selectedIndex === index
+                onClicked: {
+                    root.selectedIndex = index
+                    root.itemSelected(index)
+                }
+            }
         }
-    }
-
-    contentItem: Text {
-        text: control.text
-        color: control.checked ? control.checkedTextColor : control.normalTextColor
-        font.pixelSize: 14
-        font.bold: control.checked
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
     }
 }

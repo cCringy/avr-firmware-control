@@ -22,11 +22,11 @@ void set_data_frame_size(framesize_t * framesize){
 }
 
 #if UART_FRAMESIZE == 9
-  void uart_transmit(uint16_t data) { uart_transmit9(data); }
-  uint16_t uart_receive(void)       { return uart_receive9(); }
+  void uart_transmit(uint16_t data) { uart_transmit9(data);}
+  uint16_t uart_receive(void)       { return uart_receive9();}
 #else
-  void uart_transmit(uint8_t data) { uart_transmit8(data); }
-  uint8_t uart_receive(void)       { return uart_receive8(); }
+  void uart_transmit(uint8_t data) { uart_transmit8(data);}
+  uint8_t uart_receive(void)       { return uart_receive8();}
 #endif
 
 void

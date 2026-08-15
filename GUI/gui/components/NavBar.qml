@@ -5,14 +5,13 @@ import QtQuick.Layouts
 Rectangle {
     id: root
 
-    property var items: []
+    property alias tabs: buttons.model
     property int selectedIndex: 0
 
     signal itemSelected(int index)
 
     Layout.fillHeight: true
     Layout.preferredWidth: Math.max(75, window.width * 0.1)
-    color: "#1e1e2e"
     z: 50
 
     ColumnLayout {
@@ -21,12 +20,16 @@ Rectangle {
         spacing: 10
 
         Repeater {
-            model: ["Pinout", "ADC", "UART"]
+            id : buttons
 
             NavButton {
+                Layout.fillWidth: true
                 text: modelData
-                checked: stack.currentIndex === index
-                onClicked: stack.currentIndex = index
+                checked: root.selectedIndex === index
+                onClicked: {
+                    root.selectedIndex = index
+                    root.itemSelected(index)
+                }
             }
         }
     }

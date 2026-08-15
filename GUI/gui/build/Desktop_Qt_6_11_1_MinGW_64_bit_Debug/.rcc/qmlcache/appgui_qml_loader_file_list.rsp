@@ -7,5 +7,5 @@ C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Deskt
 --resource
 C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc
 /qt/qml/gui/Main.qml
-/qt/qml/gui/NavButton.qml
+/qt/qml/gui/components/NavButton.qml
 /qt/qml/gui/components/NavBar.qml
