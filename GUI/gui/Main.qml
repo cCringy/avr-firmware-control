@@ -46,6 +46,15 @@ ApplicationWindow {
                     text: "Pinout Panel"
                     color: "white"
                 }
+
+                Image{
+                    id: pinoutImage
+                    anchors.fill: parent
+                    source: "qrc:/qt/qml/gui/images/pinout.png"
+                    fillMode: Image.PreserveAspectFit
+                    smooth: true
+                    mipmap: true
+                }
             }
             Rectangle {
                 color: "#2c2c2c"

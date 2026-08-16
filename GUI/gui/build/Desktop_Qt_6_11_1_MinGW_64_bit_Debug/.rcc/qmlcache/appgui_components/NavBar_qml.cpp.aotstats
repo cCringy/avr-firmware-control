@@ -18,7 +18,7 @@
                             "column": 23,
                             "durationMicroseconds": 0,
                             "functionName": "fill",
-                            "line": 18,
+                            "line": 20,
                             "message": ""
                         },
                         {
@@ -26,7 +26,7 @@
                             "column": 23,
                             "durationMicroseconds": 0,
                             "functionName": "text",
-                            "line": 27,
+                            "line": 30,
                             "message": "Could not find property \"text\"."
                         },
                         {
@@ -34,7 +34,7 @@
                             "column": 26,
                             "durationMicroseconds": 0,
                             "functionName": "checked",
-                            "line": 28,
+                            "line": 31,
                             "message": "Could not find property \"checked\"."
                         },
                         {
@@ -42,7 +42,7 @@
                             "column": 28,
                             "durationMicroseconds": 0,
                             "functionName": "onClicked",
-                            "line": 29,
+                            "line": 32,
                             "message": "Could not find signal \"clicked\"."
                         }
                     ],

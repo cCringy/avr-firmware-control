@@ -68,7 +68,9 @@ include CMakeFiles/appgui_copy_res.dir/progress.make
 CMakeFiles/appgui_copy_res: .qt/appgui_res.txt
 
 .qt/appgui_res.txt: D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Qml/Qt6QmlCopyFiles.cmake
+.qt/appgui_res.txt: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/pin_coords.md
 .qt/appgui_res.txt: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/images/app_icon.png
+.qt/appgui_res.txt: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/images/pinout.png
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Copying appgui qml resources into build dir"
 	D:\Qt\Tools\CMake_64\bin\cmake.exe "-DFILES_INFO_PATH=C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/appgui_res.cmake" -P D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Qml/Qt6QmlCopyFiles.cmake
 

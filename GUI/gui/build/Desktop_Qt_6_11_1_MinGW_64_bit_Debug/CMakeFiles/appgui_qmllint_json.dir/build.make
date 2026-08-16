@@ -69,6 +69,7 @@ CMakeFiles/appgui_qmllint_json: D:/Qt/6.11.1/mingw_64/bin/qmllint.exe
 CMakeFiles/appgui_qmllint_json: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/Main.qml
 CMakeFiles/appgui_qmllint_json: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/NavButton.qml
 CMakeFiles/appgui_qmllint_json: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/NavBar.qml
+CMakeFiles/appgui_qmllint_json: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml
 CMakeFiles/appgui_qmllint_json: .rcc/qmllint/appgui_json.rsp
 	cd /d C:\Users\rfick\Desktop\EMBEDD~1\AVR-FI~1\GUI\gui && call "C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\.qt\bin\qt_setup_tool_path.bat" D:/Qt/6.11.1/mingw_64/bin/qmllint.exe "@C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmllint/appgui_json.rsp"
 

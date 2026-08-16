@@ -14,16 +14,19 @@ Rectangle {
     Layout.preferredWidth: Math.max(75, window.width * 0.1)
     z: 50
 
+    color: "#2c2c2c"
+
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 10
-        spacing: 10
+        anchors.rightMargin: 5
+        spacing: 1
 
         Repeater {
             id : buttons
 
             NavButton {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
                 text: modelData
                 checked: root.selectedIndex === index
                 onClicked: {

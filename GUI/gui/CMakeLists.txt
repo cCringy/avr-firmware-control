@@ -33,9 +33,11 @@ qt_add_qml_module(appgui
         Main.qml
         components/NavButton.qml
         components/NavBar.qml
+        components/PinoutInterface.qml
     RESOURCES
+        pin_coords.md
         images/app_icon.png
-        SOURCES
+        images/pinout.png
 )
 
 target_link_libraries(appgui

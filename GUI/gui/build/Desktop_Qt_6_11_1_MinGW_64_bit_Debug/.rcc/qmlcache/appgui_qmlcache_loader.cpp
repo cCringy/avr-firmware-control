@@ -26,6 +26,13 @@ namespace _qt_qml_gui_components_NavBar_qml {
         reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
     };
 }
+namespace _qt_qml_gui_components_PinoutInterface_qml { 
+    extern const unsigned char qmlData[];
+    extern const QQmlPrivate::AOTCompiledFunction aotBuiltFunctions[];
+    const QQmlPrivate::CachedQmlUnit unit = {
+        reinterpret_cast<const QV4::CompiledData::Unit*>(&qmlData), &aotBuiltFunctions[0], nullptr
+    };
+}
 
 }
 namespace {
@@ -43,6 +50,7 @@ Registry::Registry() {
     resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/gui/Main.qml"), &QmlCacheGeneratedCode::_qt_qml_gui_Main_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/gui/components/NavButton.qml"), &QmlCacheGeneratedCode::_qt_qml_gui_components_NavButton_qml::unit);
     resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/gui/components/NavBar.qml"), &QmlCacheGeneratedCode::_qt_qml_gui_components_NavBar_qml::unit);
+    resourcePathToCachedUnit.insert(QStringLiteral("/qt/qml/gui/components/PinoutInterface.qml"), &QmlCacheGeneratedCode::_qt_qml_gui_components_PinoutInterface_qml::unit);
     QQmlPrivate::RegisterQmlUnitCacheHook registration;
     registration.structVersion = 0;
     registration.lookupCachedQmlUnit = &lookupCachedUnit;

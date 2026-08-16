@@ -1,6 +1,8 @@
 <RCC>
   <qresource prefix="/qt/qml/gui/">
+    <file alias="pin_coords.md">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/pin_coords.md</file>
     <file alias="images/app_icon.png">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/app_icon.png</file>
+    <file alias="images/pinout.png">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/pinout.png</file>
   </qresource>
 </RCC>
 
