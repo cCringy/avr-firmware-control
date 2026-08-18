@@ -6,34 +6,65 @@ Rectangle {
     id: root
 
     property alias tabs: buttons.model
+
+    default property alias content: extraArea.data
+
     property int selectedIndex: 0
 
     signal itemSelected(int index)
 
-    Layout.fillHeight: true
-    Layout.preferredWidth: Math.max(75, window.width * 0.1)
-    z: 50
-
-    color: "#2c2c2c"
+    color: "#212529"
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.rightMargin: 5
-        spacing: 1
+        anchors.margins: 5
+        spacing: 5
 
-        Repeater {
-            id : buttons
+        Rectangle {
+            id: tabsCard
+            radius: 20
+            Layout.fillWidth: true
+            Layout.preferredHeight: tabsWrapper.height + 5
+            color: "#3A3F5C"
 
-            NavButton {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                text: modelData
-                checked: root.selectedIndex === index
-                onClicked: {
-                    root.selectedIndex = index
-                    root.itemSelected(index)
+            Item {
+                id: tabsWrapper
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                width: 32          // = collapsedWidth der Buttons, fix
+                height: buttonsColumn.implicitHeight
+
+                ColumnLayout {
+                    id: buttonsColumn
+                    anchors.left: parent.left
+                    spacing: 8
+                    Repeater {
+                        id: buttons
+                        NavButton {
+                            Layout.fillWidth: false
+                            text: modelData.name
+                            iconSource: modelData.icon
+                            icon.color: "transparent"
+                            checked: root.selectedIndex === index
+                            onClicked: {
+                                root.selectedIndex = index
+                                root.itemSelected(index)
+                            }
+                        }
+                    }
                 }
             }
         }
+
+        ColumnLayout {
+            id: extraArea
+            Layout.fillWidth: true
+            // hier landen später Settings-Button, Text etc. (default property)
+        }
     }
 }
+
+
+
+

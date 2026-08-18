@@ -38,6 +38,12 @@ qt_add_qml_module(appgui
         pin_coords.md
         images/app_icon.png
         images/pinout.png
+        images/adc_icon.gif
+        images/adc_iconv2.gif
+        images/pinout_icon.png
+        images/uart_icon.png
+        images/adc_icon-transparent.gif
+        RESOURCES colors.md
 )
 
 target_link_libraries(appgui

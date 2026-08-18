@@ -18,15 +18,23 @@
                             "column": 19,
                             "durationMicroseconds": 0,
                             "functionName": "tabs",
-                            "line": 25,
+                            "line": 31,
                             "message": "Cannot generate efficient code for storing an array in a non-sequence type"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 36,
+                            "durationMicroseconds": 0,
+                            "functionName": "preferredWidth",
+                            "line": 29,
+                            "message": ""
                         },
                         {
                             "codegenResult": 0,
                             "column": 25,
                             "durationMicroseconds": 0,
                             "functionName": "target",
-                            "line": 28,
+                            "line": 38,
                             "message": ""
                         },
                         {
@@ -34,7 +42,7 @@
                             "column": 17,
                             "durationMicroseconds": 0,
                             "functionName": "onItemSelected",
-                            "line": 30,
+                            "line": 40,
                             "message": "Functions without type annotations won't be compiled"
                         },
                         {
@@ -42,7 +50,7 @@
                             "column": 27,
                             "durationMicroseconds": 0,
                             "functionName": "currentIndex",
-                            "line": 40,
+                            "line": 50,
                             "message": ""
                         },
                         {
@@ -50,7 +58,7 @@
                             "column": 39,
                             "durationMicroseconds": 0,
                             "functionName": "centerIn",
-                            "line": 45,
+                            "line": 55,
                             "message": ""
                         },
                         {
@@ -58,7 +66,7 @@
                             "column": 31,
                             "durationMicroseconds": 0,
                             "functionName": "fillMode",
-                            "line": 54,
+                            "line": 64,
                             "message": ""
                         },
                         {
@@ -66,14 +74,6 @@
                             "column": 35,
                             "durationMicroseconds": 0,
                             "functionName": "fill",
-                            "line": 52,
-                            "message": ""
-                        },
-                        {
-                            "codegenResult": 0,
-                            "column": 39,
-                            "durationMicroseconds": 0,
-                            "functionName": "centerIn",
                             "line": 62,
                             "message": ""
                         },
@@ -82,7 +82,15 @@
                             "column": 39,
                             "durationMicroseconds": 0,
                             "functionName": "centerIn",
-                            "line": 70,
+                            "line": 72,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 39,
+                            "durationMicroseconds": 0,
+                            "functionName": "centerIn",
+                            "line": 80,
                             "message": ""
                         }
                     ],

@@ -22,7 +22,17 @@ ApplicationWindow {
         // --- Navbar ---
         NavBar{
             id: navBar
-            tabs: ["Pinout","ADC","UART"]
+
+            z: 50
+
+            Layout.fillHeight: true
+            Layout.preferredWidth: Math.max(50, window.width * 0.1)
+
+            tabs: [
+                {name: "Pinout", icon: "qrc:/qt/qml/gui/images/pinout_icon.png"},
+                {name: "ADC", icon: "qrc:/qt/qml/gui/images/adc_iconv2.gif"},
+                {name: "UART", icon: "qrc:/qt/qml/gui/images/uart_icon.png"}
+            ]
 
             Connections {
                 target: navBar
@@ -40,7 +50,7 @@ ApplicationWindow {
             currentIndex: navBar.selectedIndex
 
             Rectangle {
-                color: "#2c2c2c"
+                color: "#343A40"
                 Text {
                     anchors.centerIn: parent
                     text: "Pinout Panel"
