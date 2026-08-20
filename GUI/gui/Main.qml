@@ -62,7 +62,7 @@ ApplicationWindow {
                     anchors.margins: 10;
                     source: "qrc:/qt/qml/gui/images/pinout.png"
 
-                    Component.onCompleted: loadPins("qrc:/qt/qml/gui/data/pins.json")
+                    Component.onCompleted: loadPins("C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\pindata/pins.json")
 
                     onPinClicked: (pinName, pinType) => {
                         console.log("Pin geklickt:", pinName, "Typ:", pinType)

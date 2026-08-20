@@ -1,6 +1,7 @@
 [
 {"name":"NC","type":"special","x":43,"y":758},
 {"name":"IOREF","type":"special","x":43,"y":815},
+{"name":"PC6","type":"special","x":43,"y":872},
 {"name":"+3V3","type":"power","x":43,"y":929},
 {"name":"+5V","type":"power","x":43,"y":987},
 {"name":"GND","type":"power","x":43,"y":1044},

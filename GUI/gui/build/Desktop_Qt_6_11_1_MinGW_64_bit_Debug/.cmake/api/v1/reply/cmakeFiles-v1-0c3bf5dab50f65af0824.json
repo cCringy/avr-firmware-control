@@ -4718,6 +4718,9 @@
 			"path" : "D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigureFileTemplate.in"
 		},
 		{
+			"path" : "config.h.in"
+		},
+		{
 			"isExternal" : true,
 			"path" : "D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Qml/Qt6qmldirTemplate.cmake.in"
 		},

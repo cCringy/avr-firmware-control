@@ -402,4 +402,5 @@ CMakeFiles/appgui.dir/pinloader.cpp.obj: \
  D:/Qt/6.11.1/mingw_64/include/QtCore/qendian.h \
  D:/Qt/6.11.1/mingw_64/include/QtCore/QJsonObject \
  D:/Qt/6.11.1/mingw_64/include/QtCore/qjsonobject.h \
- D:/Qt/6.11.1/mingw_64/include/QtCore/QDebug
+ D:/Qt/6.11.1/mingw_64/include/QtCore/QDebug \
+ C:/Users/rfick/Desktop/EMBEDD~1/AVR-FI~1/GUI/gui/build/DESKTO~1/config.h

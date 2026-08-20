@@ -9,7 +9,7 @@
                     }
                 ],
                 "className": "PinLoader",
-                "lineNumber": 8,
+                "lineNumber": 6,
                 "methods": [
                     {
                         "access": "public",
@@ -19,17 +19,34 @@
                                 "type": "QString"
                             },
                             {
-                                "name": "ImageWidth",
+                                "name": "imageWidth",
                                 "type": "qreal"
                             },
                             {
-                                "name": "ImageHeight",
+                                "name": "imageHeight",
                                 "type": "qreal"
                             }
                         ],
                         "index": 0,
-                        "lineNumber": 15,
+                        "lineNumber": 12,
                         "name": "loadPins",
+                        "returnType": "QVariantList"
+                    },
+                    {
+                        "access": "public",
+                        "arguments": [
+                            {
+                                "name": "imageWidth",
+                                "type": "qreal"
+                            },
+                            {
+                                "name": "imageHeight",
+                                "type": "qreal"
+                            }
+                        ],
+                        "index": 1,
+                        "lineNumber": 13,
+                        "name": "loadDefaultPins",
                         "returnType": "QVariantList"
                     }
                 ],

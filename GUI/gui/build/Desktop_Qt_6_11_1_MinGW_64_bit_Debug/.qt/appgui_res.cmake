@@ -2,10 +2,6 @@
 set(target "appgui")
 set(working_dir "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui")
 set(src_and_dest_list
-    "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/data/pin_coords.md"
-    "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/data/pin_coords.md"
-    "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/data/pins.json"
-    "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/data/pins.json"
     "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/app_icon.png"
     "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/images/app_icon.png"
     "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/pinout.png"

@@ -38,8 +38,6 @@ qt_add_qml_module(appgui
         pinloader.h
         pinloader.cpp
     RESOURCES
-        data/pin_coords.md
-        data/pins.json
         images/app_icon.png
         images/pinout.png
         images/adc_icon.gif
@@ -56,3 +54,11 @@ install(TARGETS appgui
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+get_filename_component(REPO_ROOT "${CMAKE_SOURCE_DIR}/../.." ABSOLUTE)
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/config.h
+)
+target_include_directories(appgui PRIVATE ${CMAKE_CURRENT_BINARY_DIR})

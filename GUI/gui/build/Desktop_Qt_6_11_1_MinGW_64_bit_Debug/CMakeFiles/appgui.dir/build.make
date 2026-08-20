@@ -175,8 +175,6 @@ gui/appgui.qmltypes: appgui_qmltyperegistrations.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Running rcc for resource appgui_raw_qml_0"
 	D:\Qt\6.11.1\mingw_64\bin\rcc.exe --output "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/qrc_appgui_raw_qml_0.cpp" --name appgui_raw_qml_0 "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0.qrc" --no-zstd
 
-.qt/rcc/qrc_appgui_raw_res_0.cpp: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/data/pin_coords.md
-.qt/rcc/qrc_appgui_raw_res_0.cpp: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/data/pins.json
 .qt/rcc/qrc_appgui_raw_res_0.cpp: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/images/app_icon.png
 .qt/rcc/qrc_appgui_raw_res_0.cpp: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/images/pinout.png
 .qt/rcc/qrc_appgui_raw_res_0.cpp: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/images/adc_icon.gif

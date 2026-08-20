@@ -1125,6 +1125,7 @@
 		"D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigureFileTemplate.in",
 		"D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Qml/Qt6qmldirTemplate.cmake.in",
 		"D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Core/Qt6CoreConfigureFileTemplate.in",
+		"C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/config.h.in",
 		"D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Qml/Qt6qmldirTemplate.cmake.in",
 		"C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/qml_imports/appgui_conf.cmake",
 		"D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6/windows/app.exe.manifest.in"
@@ -1174,6 +1175,7 @@
 	"MOC_INCLUDES" : 
 	[
 		"C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui",
+		"C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug",
 		"D:/Qt/6.11.1/mingw_64/include/QtQml",
 		"D:/Qt/6.11.1/mingw_64/include",
 		"D:/Qt/6.11.1/mingw_64/include/QtCore",

@@ -4,19 +4,15 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDebug>
+#include "config.h"
 
 QVariantList PinLoader::loadPins(const QString &path,qreal imageWidth,qreal imageHeight){
     QVariantList result;
 
-    QString localPath = path;
-    if (localPath.startsWith("qrc:/")) {
-        localPath = ":" + localPath.mid(4);   // "qrc:/foo" -> ":/foo"
-    }
-
-    QFile file(localPath);
+    QFile file(path);
 
     if(!file.open(QIODevice::ReadOnly)){
-        qWarning()<< "Couldnt open JSON:"<<localPath;
+        qWarning()<< "Couldnt open JSON:"<<path;
         return result;
     }
 
@@ -26,10 +22,16 @@ QVariantList PinLoader::loadPins(const QString &path,qreal imageWidth,qreal imag
         QJsonObject jObj = val.toObject();
         QVariantMap pin;
         pin["name"] = jObj.value("name").toString();
-        pin["type"] = jObj.value("name").toString();
-        pin["relX"] = jObj.value("x").toDouble()/imageWidth;
-        pin["relY"] = jObj.value("x").toDouble()/imageHeight;
+        pin["type"] = jObj.value("type").toString();
+        pin["relX"] = (jObj.value("x").toDouble()+14.5)/imageWidth;
+        pin["relY"] = (jObj.value("y").toDouble()+14.5)/imageHeight;
         result.append(pin);
     }
     return result;
+}
+
+
+QVariantList PinLoader::loadDefaultPins(qreal imageWidth, qreal imageHeight) {
+    QString path = QString(PROJECT_ROOT) + "/pindata/pins.json";
+    return loadPins(path, imageWidth, imageHeight);
 }

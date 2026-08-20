@@ -68,8 +68,6 @@ include CMakeFiles/appgui_copy_res.dir/progress.make
 CMakeFiles/appgui_copy_res: .qt/appgui_res.txt
 
 .qt/appgui_res.txt: D:/Qt/6.11.1/mingw_64/lib/cmake/Qt6Qml/Qt6QmlCopyFiles.cmake
-.qt/appgui_res.txt: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/data/pin_coords.md
-.qt/appgui_res.txt: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/data/pins.json
 .qt/appgui_res.txt: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/images/app_icon.png
 .qt/appgui_res.txt: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/images/pinout.png
 .qt/appgui_res.txt: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/images/adc_icon.gif

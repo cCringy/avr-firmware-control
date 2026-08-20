@@ -1,7 +1,8 @@
 module Pinmap where
 
 import System.IO (writeFile)
-import System.Directory (createDirectoryIfMissing)
+import System.Directory (doesDirectoryExist,doesFileExist, getCurrentDirectory,createDirectoryIfMissing)
+import System.FilePath (takeDirectory, (</>))
 import Text.Read (readMaybe)
 import Data.List (intercalate)
 import Data.Maybe (mapMaybe)
@@ -49,8 +50,22 @@ parsePin s = case filter (not . null) (splitLine ":,();" (filter (/=' ') s)) of
              _                -> Nothing
 
 
+findProjectRoot :: FilePath -> IO FilePath
+findProjectRoot dir = do
+    exists <- doesDirectoryExist (dir </> "GUI")
+    if exists
+        then return dir
+        else let parent = takeDirectory dir
+             in if parent == dir
+                then error "Projekt-Root (Ordner mit 'GUI') nicht gefunden"
+                else findProjectRoot parent
+
+
 configPath :: String
 configPath = "./pins.txt"
+
+outputDir :: String
+outputDir = "GUI/gui/data"
 
 pinTypeToJSON :: PinType -> String
 pinTypeToJSON Analog        = "analog"
@@ -65,9 +80,12 @@ pinToJSON p = "{\"name\":\"" ++ name p ++ "\",\"type\":\"" ++ pinTypeToJSON(pinT
 pinsToJSON::[Pin]->String
 pinsToJSON ps = "[\n" ++ intercalate ",\n" (map pinToJSON ps) ++ "\n]"
 
-main::IO ()
-main = do 
-          content <- readFile configPath
-          let pins = mapMaybe parsePin (lines content)
-          createDirectoryIfMissing True "GUI/gui/data"
-          writeFile "GUI/gui/pins.json" (pinsToJSON pins)
+main :: IO ()
+main = do
+    cwd  <- getCurrentDirectory
+    root <- findProjectRoot cwd
+    let pindataDir = root </> "pindata"
+    content <- readFile (pindataDir </> "pins.txt")
+    let pins = mapMaybe parsePin (lines content)
+    createDirectoryIfMissing True pindataDir
+    writeFile (pindataDir </> "pins.json") (pinsToJSON pins)

@@ -8,7 +8,7 @@ import QtQuick.tooling 1.2
 Module {
     Component {
         file: "pinloader.h"
-        lineNumber: 8
+        lineNumber: 6
         name: "PinLoader"
         accessSemantics: "reference"
         prototype: "QObject"
@@ -17,10 +17,17 @@ Module {
         Method {
             name: "loadPins"
             type: "QVariantList"
-            lineNumber: 15
+            lineNumber: 12
             Parameter { name: "path"; type: "QString" }
-            Parameter { name: "ImageWidth"; type: "double" }
-            Parameter { name: "ImageHeight"; type: "double" }
+            Parameter { name: "imageWidth"; type: "double" }
+            Parameter { name: "imageHeight"; type: "double" }
+        }
+        Method {
+            name: "loadDefaultPins"
+            type: "QVariantList"
+            lineNumber: 13
+            Parameter { name: "imageWidth"; type: "double" }
+            Parameter { name: "imageHeight"; type: "double" }
         }
     }
 }

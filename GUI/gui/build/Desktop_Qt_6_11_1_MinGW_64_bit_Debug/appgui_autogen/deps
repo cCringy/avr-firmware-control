@@ -8,6 +8,7 @@ appgui_autogen/timestamp: \
 	C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
 	C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/3.30.5/CMakeSystem.cmake \
 	C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/appgui_autogen/moc_predefs.h \
+	C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/config.h.in \
 	C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/main.cpp \
 	C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/pinloader.cpp \
 	C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/pinloader.h \
