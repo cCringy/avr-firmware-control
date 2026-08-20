@@ -7,6 +7,9 @@
 #include <QtQml/qqml.h>
 #include <QtQml/qqmlmoduleregistration.h>
 
+#if __has_include(<pinloader.h>)
+#  include <pinloader.h>
+#endif
 
 
 #if !defined(QT_STATIC)
@@ -17,6 +20,7 @@
 Q_QMLTYPE_EXPORT void qml_register_types_gui()
 {
     QT_WARNING_PUSH QT_WARNING_DISABLE_DEPRECATED
+    qmlRegisterTypesAndRevisions<PinLoader>("gui", 1);
     QT_WARNING_POP
     qmlRegisterModule("gui", 1, 0);
 }

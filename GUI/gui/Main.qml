@@ -24,13 +24,12 @@ ApplicationWindow {
             id: navBar
 
             z: 50
-
             Layout.fillHeight: true
-            Layout.preferredWidth: Math.max(50, window.width * 0.1)
+            Layout.preferredWidth: 70
 
             tabs: [
                 {name: "Pinout", icon: "qrc:/qt/qml/gui/images/pinout_icon.png"},
-                {name: "ADC", icon: "qrc:/qt/qml/gui/images/adc_iconv2.gif"},
+                {name: "ADC", icon: "qrc:/qt/qml/gui/images/adc_icon.gif"},
                 {name: "UART", icon: "qrc:/qt/qml/gui/images/uart_icon.png"}
             ]
 
@@ -57,13 +56,17 @@ ApplicationWindow {
                     color: "white"
                 }
 
-                Image{
-                    id: pinoutImage
+                PinoutInterface{
                     anchors.fill: parent
+
+                    anchors.margins: 10;
                     source: "qrc:/qt/qml/gui/images/pinout.png"
-                    fillMode: Image.PreserveAspectFit
-                    smooth: true
-                    mipmap: true
+
+                    Component.onCompleted: loadPins("qrc:/qt/qml/gui/data/pins.json")
+
+                    onPinClicked: (pinName, pinType) => {
+                        console.log("Pin geklickt:", pinName, "Typ:", pinType)
+                    }
                 }
             }
             Rectangle {

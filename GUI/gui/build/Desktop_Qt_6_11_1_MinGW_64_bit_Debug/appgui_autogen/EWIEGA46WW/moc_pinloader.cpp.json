@@ -1,0 +1,47 @@
+{
+    "classes": [
+        {
+            "classInfos": [
+                {
+                    "name": "QML.Element",
+                    "value": "auto"
+                }
+            ],
+            "className": "PinLoader",
+            "lineNumber": 8,
+            "methods": [
+                {
+                    "access": "public",
+                    "arguments": [
+                        {
+                            "name": "path",
+                            "type": "QString"
+                        },
+                        {
+                            "name": "ImageWidth",
+                            "type": "qreal"
+                        },
+                        {
+                            "name": "ImageHeight",
+                            "type": "qreal"
+                        }
+                    ],
+                    "index": 0,
+                    "lineNumber": 15,
+                    "name": "loadPins",
+                    "returnType": "QVariantList"
+                }
+            ],
+            "object": true,
+            "qualifiedClassName": "PinLoader",
+            "superClasses": [
+                {
+                    "access": "public",
+                    "name": "QObject"
+                }
+            ]
+        }
+    ],
+    "inputFile": "pinloader.h",
+    "outputRevision": 69
+}

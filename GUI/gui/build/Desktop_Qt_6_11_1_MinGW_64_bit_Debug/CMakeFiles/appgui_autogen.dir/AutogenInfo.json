@@ -1133,7 +1133,15 @@
 	"CROSS_CONFIG" : false,
 	"DEP_FILE" : "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/appgui_autogen/deps",
 	"DEP_FILE_RULE_NAME" : "appgui_autogen/timestamp",
-	"HEADERS" : [],
+	"HEADERS" : 
+	[
+		[
+			"C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/pinloader.h",
+			"MU",
+			"EWIEGA46WW/moc_pinloader.cpp",
+			null
+		]
+	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
 	"INCLUDE_DIR" : "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/appgui_autogen/include",
 	"MOC_COMPILATION_FILE" : "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/appgui_autogen/mocs_compilation.cpp",
@@ -1228,6 +1236,11 @@
 	[
 		[
 			"C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/main.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/pinloader.cpp",
 			"MU",
 			null
 		]

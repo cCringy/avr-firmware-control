@@ -23,10 +23,18 @@
                         },
                         {
                             "codegenResult": 0,
+                            "column": 31,
+                            "durationMicroseconds": 0,
+                            "functionName": "alignment",
+                            "line": 28,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
                             "column": 25,
                             "durationMicroseconds": 0,
                             "functionName": "height",
-                            "line": 36,
+                            "line": 37,
                             "message": ""
                         },
                         {
@@ -34,7 +42,7 @@
                             "column": 43,
                             "durationMicroseconds": 0,
                             "functionName": "horizontalCenter",
-                            "line": 32,
+                            "line": 33,
                             "message": ""
                         },
                         {
@@ -42,7 +50,7 @@
                             "column": 30,
                             "durationMicroseconds": 0,
                             "functionName": "top",
-                            "line": 33,
+                            "line": 34,
                             "message": ""
                         },
                         {
@@ -50,7 +58,7 @@
                             "column": 35,
                             "durationMicroseconds": 0,
                             "functionName": "left",
-                            "line": 40,
+                            "line": 41,
                             "message": ""
                         },
                         {
@@ -58,7 +66,7 @@
                             "column": 35,
                             "durationMicroseconds": 0,
                             "functionName": "text",
-                            "line": 46,
+                            "line": 47,
                             "message": "Could not find property \"text\"."
                         },
                         {
@@ -66,7 +74,7 @@
                             "column": 41,
                             "durationMicroseconds": 0,
                             "functionName": "iconSource",
-                            "line": 47,
+                            "line": 48,
                             "message": "Cannot access value for name modelData"
                         },
                         {
@@ -74,7 +82,7 @@
                             "column": 38,
                             "durationMicroseconds": 0,
                             "functionName": "checked",
-                            "line": 49,
+                            "line": 50,
                             "message": "Could not find property \"checked\"."
                         },
                         {
@@ -82,7 +90,7 @@
                             "column": 40,
                             "durationMicroseconds": 0,
                             "functionName": "onClicked",
-                            "line": 50,
+                            "line": 51,
                             "message": "Could not find signal \"clicked\"."
                         }
                     ],

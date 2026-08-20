@@ -39,6 +39,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_qmlcache_loader.cpp.obj.d"
   "CMakeFiles/appgui.dir/main.cpp.obj"
   "CMakeFiles/appgui.dir/main.cpp.obj.d"
+  "CMakeFiles/appgui.dir/pinloader.cpp.obj"
+  "CMakeFiles/appgui.dir/pinloader.cpp.obj.d"
   "appgui.exe"
   "appgui.exe.manifest"
   "appgui.pdb"

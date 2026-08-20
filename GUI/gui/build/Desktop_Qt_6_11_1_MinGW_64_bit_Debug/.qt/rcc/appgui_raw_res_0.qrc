@@ -1,14 +1,12 @@
 <RCC>
   <qresource prefix="/qt/qml/gui/">
-    <file alias="pin_coords.md">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/pin_coords.md</file>
+    <file alias="data/pin_coords.md">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/data/pin_coords.md</file>
+    <file alias="data/pins.json">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/data/pins.json</file>
     <file alias="images/app_icon.png">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/app_icon.png</file>
     <file alias="images/pinout.png">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/pinout.png</file>
     <file alias="images/adc_icon.gif">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/adc_icon.gif</file>
-    <file alias="images/adc_iconv2.gif">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/adc_iconv2.gif</file>
     <file alias="images/pinout_icon.png">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/pinout_icon.png</file>
     <file alias="images/uart_icon.png">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/uart_icon.png</file>
-    <file alias="images/adc_icon-transparent.gif">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/images/adc_icon-transparent.gif</file>
-    <file alias="colors.md">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/colors.md</file>
   </qresource>
 </RCC>
 

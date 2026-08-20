@@ -370,4 +370,11 @@ CMakeFiles/appgui.dir/appgui_qmltyperegistrations.cpp.obj: \
  D:/Qt/6.11.1/mingw_64/include/QtCore/q20iterator.h \
  D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlregistration.h \
  D:/Qt/6.11.1/mingw_64/include/QtQmlIntegration/qqmlintegration.h \
- D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlmoduleregistration.h
+ D:/Qt/6.11.1/mingw_64/include/QtQml/qqmlmoduleregistration.h \
+ C:/Users/rfick/Desktop/EMBEDD~1/AVR-FI~1/GUI/gui/pinloader.h \
+ D:/Qt/6.11.1/mingw_64/include/QtCore/QObject \
+ D:/Qt/6.11.1/mingw_64/include/QtCore/QVariantList \
+ D:/Qt/6.11.1/mingw_64/include/QtCore/qvariantlist.h \
+ D:/Qt/6.11.1/mingw_64/include/QtCore/QList \
+ D:/Qt/6.11.1/mingw_64/include/QtCore/QVariant \
+ D:/Qt/6.11.1/mingw_64/include/QtQmlIntegration/qqmlintegration.h

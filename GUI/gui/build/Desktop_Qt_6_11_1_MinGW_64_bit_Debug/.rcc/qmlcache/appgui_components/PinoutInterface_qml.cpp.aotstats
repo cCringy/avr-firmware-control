@@ -7,26 +7,26 @@
                     "entries": [
                         {
                             "codegenResult": 2,
-                            "column": 25,
+                            "column": 24,
                             "durationMicroseconds": 0,
                             "functionName": "pins",
-                            "line": 7,
+                            "line": 8,
                             "message": "Cannot generate efficient code for storing an array in a non-sequence type"
                         },
                         {
                             "codegenResult": 2,
-                            "column": 17,
+                            "column": 5,
                             "durationMicroseconds": 0,
-                            "functionName": "source",
-                            "line": 13,
-                            "message": "Cannot load property imageSource from PinoutInterface."
+                            "functionName": "loadPins",
+                            "line": 19,
+                            "message": "Functions without type annotations won't be compiled"
                         },
                         {
                             "codegenResult": 0,
                             "column": 19,
                             "durationMicroseconds": 0,
                             "functionName": "fillMode",
-                            "line": 14,
+                            "line": 25,
                             "message": ""
                         },
                         {
@@ -34,7 +34,39 @@
                             "column": 23,
                             "durationMicroseconds": 0,
                             "functionName": "fill",
-                            "line": 12,
+                            "line": 24,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 12,
+                            "durationMicroseconds": 0,
+                            "functionName": "x",
+                            "line": 32,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 12,
+                            "durationMicroseconds": 0,
+                            "functionName": "y",
+                            "line": 33,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 16,
+                            "durationMicroseconds": 0,
+                            "functionName": "width",
+                            "line": 34,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 17,
+                            "durationMicroseconds": 0,
+                            "functionName": "height",
+                            "line": 35,
                             "message": ""
                         },
                         {
@@ -42,16 +74,120 @@
                             "column": 20,
                             "durationMicroseconds": 0,
                             "functionName": "model",
-                            "line": 22,
+                            "line": 38,
                             "message": ""
                         },
                         {
                             "codegenResult": 2,
-                            "column": 28,
+                            "column": 20,
+                            "durationMicroseconds": 0,
+                            "functionName": "x",
+                            "line": 43,
+                            "message": "Cannot load property relX from (component in C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml)::modelData with type QVariant."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 20,
+                            "durationMicroseconds": 0,
+                            "functionName": "y",
+                            "line": 44,
+                            "message": "Cannot load property relY from (component in C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml)::modelData with type QVariant."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 24,
+                            "durationMicroseconds": 0,
+                            "functionName": "width",
+                            "line": 45,
+                            "message": "Cannot load property relW from (component in C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml)::modelData with type QVariant."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 25,
+                            "durationMicroseconds": 0,
+                            "functionName": "height",
+                            "line": 46,
+                            "message": "Cannot load property relH from (component in C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml)::modelData with type QVariant."
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 25,
+                            "durationMicroseconds": 0,
+                            "functionName": "radius",
+                            "line": 48,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 24,
+                            "durationMicroseconds": 0,
+                            "functionName": "color",
+                            "line": 49,
+                            "message": "Cannot generate efficient code for internal conversion with incompatible or ambiguous types: conversion to QVariant -> QColor stored as QVariant"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 31,
+                            "durationMicroseconds": 0,
+                            "functionName": "color",
+                            "line": 52,
+                            "message": "Cannot access value for name root"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 31,
+                            "durationMicroseconds": 0,
+                            "functionName": "width",
+                            "line": 53,
+                            "message": "Cannot access value for name root"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 34,
+                            "durationMicroseconds": 0,
+                            "functionName": "cursorShape",
+                            "line": 59,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 32,
                             "durationMicroseconds": 0,
                             "functionName": "onClicked",
-                            "line": 24,
+                            "line": 61,
                             "message": "Cannot access value for name root"
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 32,
+                            "durationMicroseconds": 0,
+                            "functionName": "onEntered",
+                            "line": 65,
+                            "message": "Cannot access value for name root"
+                        },
+                        {
+                            "codegenResult": 0,
+                            "column": 35,
+                            "durationMicroseconds": 0,
+                            "functionName": "fill",
+                            "line": 57,
+                            "message": ""
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 34,
+                            "durationMicroseconds": 0,
+                            "functionName": "visible",
+                            "line": 68,
+                            "message": "Could not find property \"visible\"."
+                        },
+                        {
+                            "codegenResult": 2,
+                            "column": 31,
+                            "durationMicroseconds": 0,
+                            "functionName": "text",
+                            "line": 70,
+                            "message": "Could not find property \"text\"."
                         }
                     ],
                     "filePath": "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml"

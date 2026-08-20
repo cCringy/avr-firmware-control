@@ -695,6 +695,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+pinloader.obj: pinloader.cpp.obj
+.PHONY : pinloader.obj
+
+# target to build an object file
+pinloader.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/pinloader.cpp.obj
+.PHONY : pinloader.cpp.obj
+
+pinloader.i: pinloader.cpp.i
+.PHONY : pinloader.i
+
+# target to preprocess a source file
+pinloader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/pinloader.cpp.i
+.PHONY : pinloader.cpp.i
+
+pinloader.s: pinloader.cpp.s
+.PHONY : pinloader.s
+
+# target to generate assembly for a file
+pinloader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/pinloader.cpp.s
+.PHONY : pinloader.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -762,6 +786,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... pinloader.obj
+	@echo ... pinloader.i
+	@echo ... pinloader.s
 .PHONY : help
 
 

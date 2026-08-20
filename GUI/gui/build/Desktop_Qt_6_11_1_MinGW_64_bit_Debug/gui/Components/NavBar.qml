@@ -22,9 +22,10 @@ Rectangle {
 
         Rectangle {
             id: tabsCard
-            radius: 20
-            Layout.fillWidth: true
-            Layout.preferredHeight: tabsWrapper.height + 5
+            radius: 30
+            Layout.preferredWidth: 50
+            Layout.preferredHeight: tabsWrapper.height + 20
+            Layout.alignment: Qt.AlignHCenter
             color: "#3A3F5C"
 
             Item {

@@ -60,13 +60,14 @@ Button {
     }
 
     contentItem: Item {
-        Image {
+        AnimatedImage {
             id: iconImg
             source: root.iconSource
             width: 24; height: 24
             anchors.left: parent.left
             anchors.leftMargin: (root.height - height) / 2
             anchors.verticalCenter: parent.verticalCenter
+            playing: root.hovered
         }
         Text {
             text: root.text
