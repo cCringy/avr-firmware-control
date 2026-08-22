@@ -23,8 +23,8 @@ QVariantList PinLoader::loadPins(const QString &path,qreal imageWidth,qreal imag
         QVariantMap pin;
         pin["name"] = jObj.value("name").toString();
         pin["type"] = jObj.value("type").toString();
-        pin["relX"] = (jObj.value("x").toDouble()+14.5)/imageWidth;
-        pin["relY"] = (jObj.value("y").toDouble()+14.5)/imageHeight;
+        pin["relX"] = (jObj.value("x").toDouble()+pinWidth/2)/imageWidth;
+        pin["relY"] = (jObj.value("y").toDouble()+(pinHeight/2))/imageHeight;
         result.append(pin);
     }
     return result;

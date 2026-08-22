@@ -12,6 +12,13 @@ import Data.Maybe (mapMaybe)
 data PinType = Analog | Digital | Power | Communication | Special
   deriving Show
 
+pinTypeToJSON :: PinType -> String
+pinTypeToJSON Analog        = "analog"
+pinTypeToJSON Digital       = "digital"
+pinTypeToJSON Power         = "power"
+pinTypeToJSON Communication = "communication"
+pinTypeToJSON Special       = "special"
+
 data Pin = Pin
   { name    :: String
   , pinType :: PinType
@@ -19,11 +26,6 @@ data Pin = Pin
   , y       :: Int
   } deriving Show
 
--- removeSpaces :: String -> String
--- removeSpaces [] = []
--- removeSpaces (c:cs)
---   | c == ' ' = removeSpaces cs
---   | otherwise = c:removeSpaces cs
 
 splitLine :: String->String->[String]
 splitLine elim= go ""
@@ -49,6 +51,13 @@ parsePin s = case filter (not . null) (splitLine ":,();" (filter (/=' ') s)) of
                 return (Pin name pinType px py)
              _                -> Nothing
 
+parseScale :: String -> Maybe (String,Int)
+parseScale s = case splitLine "=" (filter (/=' ') s) of
+               [scale,value] -> do 
+                  x <- readMaybe value
+                  return (scale,x)
+               _ -> Nothing
+
 
 findProjectRoot :: FilePath -> IO FilePath
 findProjectRoot dir = do
@@ -67,18 +76,14 @@ configPath = "./pins.txt"
 outputDir :: String
 outputDir = "GUI/gui/data"
 
-pinTypeToJSON :: PinType -> String
-pinTypeToJSON Analog        = "analog"
-pinTypeToJSON Digital       = "digital"
-pinTypeToJSON Power         = "power"
-pinTypeToJSON Communication = "communication"
-pinTypeToJSON Special       = "special"
+pinScale :: String->Int->String
+pinScale scale value = "\""++scale++"\":"++ show value++","
 
 pinToJSON::Pin->String
 pinToJSON p = "{\"name\":\"" ++ name p ++ "\",\"type\":\"" ++ pinTypeToJSON(pinType p) ++ "\",\"x\":" ++ show (x p) ++ ",\"y\":" ++ show (y p) ++ "}"
 
 pinsToJSON::[Pin]->String
-pinsToJSON ps = "[\n" ++ intercalate ",\n" (map pinToJSON ps) ++ "\n]"
+pinsToJSON ps = "\"pins\":[\n" ++ intercalate ",\n" (map pinToJSON ps) ++ "\n]"
 
 main :: IO ()
 main = do
@@ -86,6 +91,9 @@ main = do
     root <- findProjectRoot cwd
     let pindataDir = root </> "pindata"
     content <- readFile (pindataDir </> "pins.txt")
-    let pins = mapMaybe parsePin (lines content)
+    let (scaleOne:scaleTwo:pinLines) = lines content
+        pins                         = mapMaybe parsePin pinLines
     createDirectoryIfMissing True pindataDir
-    writeFile (pindataDir </> "pins.json") (pinsToJSON pins)
+    writeFile (pindataDir </> "pins.json") ("{"++ maybe "" (uncurry pinScale) (parseScale scaleOne) 
+                                               ++ maybe "" (uncurry pinScale) (parseScale scaleTwo)
+                                               ++ pinsToJSON pins++"}")  

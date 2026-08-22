@@ -1,4 +1,4 @@
-[
+{"pinWidth":29,"pinHeight":29,"pins":[
 {"name":"NC","type":"special","x":43,"y":758},
 {"name":"IOREF","type":"special","x":43,"y":815},
 {"name":"PC6","type":"special","x":43,"y":872},
@@ -31,4 +31,4 @@
 {"name":"D2","type":"digital","x":1132,"y":1445},
 {"name":"D1","type":"digital","x":1132,"y":1502},
 {"name":"D0","type":"digital","x":1132,"y":1559}
-]
+]}

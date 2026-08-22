@@ -44,7 +44,7 @@ Item {
                 y: modelData.relY * overlay.height - height / 2
                 width: (modelData.relW ?? 0.025) * overlay.width
                 height: (modelData.relH ?? 0.025) * overlay.height
-                radius: width / 2
+
                 color: mouseArea.containsMouse
                        ? Qt.rgba(1, 0.5, 0, 0.5)
                        : Qt.rgba(1, 0, 0, 0.15)
