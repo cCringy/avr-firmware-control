@@ -10,9 +10,11 @@ caaf00b59e1be473ed395bd4f4dc2089 .qt/rcc/qrc_appgui_raw_res_0.cpp
 474902987bddd2cf72d7f6d2c899a3a2 .qt/rcc/qrc_qmake_gui.cpp
 4b4455cf52f395b4258ab69b600168b3 .rcc/qmlcache/all_aotstats.aotstats
 54cc9d16e0c0b1f8622c26da47ef9185 .rcc/qmlcache/appgui_Main_qml.cpp
+5bc7eb123b0f8434d56d432163002b45 .rcc/qmlcache/appgui_components/ConfigPage_qml.cpp
 0c5ae745e32fa69a62ea55f5236132a5 .rcc/qmlcache/appgui_components/NavBar_qml.cpp
 cf79216f8dcf4d0d79c01e756ba6c7ce .rcc/qmlcache/appgui_components/NavButton_qml.cpp
 c591316037378c3fe4c4ed0df617e998 .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp
+843d9ff5913c8bb92100d417511c7ddc .rcc/qmlcache/appgui_components/UartInterface_qml.cpp
 71bd533a14c6b36b14c820119e1eecf0 .rcc/qmlcache/appgui_qmlcache_loader.cpp
 215a6ac9c2ba776faf2f39d3c6e84357 .rcc/qmlcache/module_appgui.aotstats
 59ea295731c2a1197e09f87c1eeba9d9 CMakeFiles/all_aotstats

@@ -76,6 +76,8 @@ CMakeFiles/appgui_qmlimportscan: .qt/qml_imports/appgui_build.cmake
 .qt/qml_imports/appgui_build.cmake: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/NavButton.qml
 .qt/qml_imports/appgui_build.cmake: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/NavBar.qml
 .qt/qml_imports/appgui_build.cmake: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml
+.qt/qml_imports/appgui_build.cmake: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/ConfigPage.qml
+.qt/qml_imports/appgui_build.cmake: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/UartInterface.qml
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Running qmlimportscanner for appgui"
 	cd /d C:\Users\rfick\Desktop\EMBEDD~1\AVR-FI~1\GUI\gui && call "C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\.qt\bin\qt_setup_tool_path.bat" D:/Qt/6.11.1/mingw_64/bin/qmlimportscanner.exe "@C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/qml_imports/appgui_build.rsp"
 

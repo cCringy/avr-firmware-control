@@ -22,9 +22,9 @@ Rectangle {
 
         Rectangle {
             id: tabsCard
-            radius: 30
-            Layout.preferredWidth: 50
-            Layout.preferredHeight: tabsWrapper.height + 20
+            radius: 35
+            Layout.preferredWidth: 40
+            Layout.preferredHeight: tabsWrapper.height + 16
             Layout.alignment: Qt.AlignHCenter
             color: "#3A3F5C"
 
@@ -32,7 +32,7 @@ Rectangle {
                 id: tabsWrapper
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: 10
+                anchors.margins: 8
                 width: 32          // = collapsedWidth der Buttons, fix
                 height: buttonsColumn.implicitHeight
 

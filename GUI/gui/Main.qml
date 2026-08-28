@@ -13,6 +13,12 @@ ApplicationWindow {
 
     title: qsTr("AVR Firmware Controlpanel")
 
+    Label {
+        font.family: "Roboto" // Standard Windows UI Schriftart
+        font.pixelSize: 12
+        color: "#000000"
+    }
+
     GridLayout {
         id: grid
         rowSpacing: 0
@@ -25,11 +31,12 @@ ApplicationWindow {
 
             z: 50
             Layout.fillHeight: true
-            Layout.preferredWidth: 70
+            Layout.preferredWidth: 50
 
             tabs: [
                 {name: "Pinout", icon: "qrc:/qt/qml/gui/images/pinout_icon.png"},
                 {name: "ADC", icon: "qrc:/qt/qml/gui/images/adc_icon.gif"},
+                {name: "Timer", icon: "qrc:/qt/qml/gui/images/timer_icon.png"},
                 {name: "UART", icon: "qrc:/qt/qml/gui/images/uart_icon.png"}
             ]
 
@@ -50,10 +57,12 @@ ApplicationWindow {
 
             Rectangle {
                 color: "#343A40"
-                Text {
-                    anchors.centerIn: parent
-                    text: "Pinout Panel"
-                    color: "white"
+
+                Label {
+                    anchors.margins: 10
+                    text: "Pinout Interface"
+                    font.pixelSize: 20
+                    font.bold: true
                 }
 
                 PinoutInterface{
@@ -71,19 +80,27 @@ ApplicationWindow {
             }
             Rectangle {
                 color: "#2c2c2c"
-                Text {
-                    anchors.centerIn: parent
-                    text: "ADC Panel"
-                    color: "white"
+                Label {
+                    anchors.margins: 10
+                    text: "Timer"
+                    font.pixelSize: 20
+                    font.bold: true
                 }
             }
+
             Rectangle {
                 color: "#2c2c2c"
-                Text{
-                    anchors.centerIn: parent
-                    text: "UART Panel"
-                    color: "white"
+                Label {
+                    anchors.margins: 10
+                    text: "ADC"
+                    font.pixelSize: 20
+                    font.bold: true
                 }
+            }
+
+            UartInterface{
+
+
             }
         }
          //------------------

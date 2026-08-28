@@ -575,6 +575,30 @@ build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_Main_qml.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_Main_qml.cpp.s
 .PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_Main_qml.cpp.s
 
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.obj: build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.obj
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.obj
+
+# target to build an object file
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.obj
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.obj
+
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.i: build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.i
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.i
+
+# target to preprocess a source file
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.i
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.i
+
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.s: build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.s
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.s
+
+# target to generate assembly for a file
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.s
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.s
+
 build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/NavBar_qml.obj: build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/NavBar_qml.cpp.obj
 .PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/NavBar_qml.obj
 
@@ -646,6 +670,30 @@ build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/Pinou
 build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.s
 .PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.s
+
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.obj: build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.obj
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.obj
+
+# target to build an object file
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.obj
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.obj
+
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.i: build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.i
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.i
+
+# target to preprocess a source file
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.i
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.i
+
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.s: build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.s
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.s
+
+# target to generate assembly for a file
+build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\appgui.dir\build.make CMakeFiles/appgui.dir/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.s
+.PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.s
 
 build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_qmlcache_loader.obj: build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_qmlcache_loader.cpp.obj
 .PHONY : build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_qmlcache_loader.obj
@@ -771,6 +819,9 @@ help:
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_Main_qml.obj
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_Main_qml.i
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_Main_qml.s
+	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.obj
+	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.i
+	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.s
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/NavBar_qml.obj
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/NavBar_qml.i
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/NavBar_qml.s
@@ -780,6 +831,9 @@ help:
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/PinoutInterface_qml.obj
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/PinoutInterface_qml.i
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/PinoutInterface_qml.s
+	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.obj
+	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.i
+	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.s
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_qmlcache_loader.obj
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_qmlcache_loader.i
 	@echo ... build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_qmlcache_loader.s

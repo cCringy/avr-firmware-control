@@ -71,6 +71,8 @@ CMakeFiles/module_appgui_aotstats_target: .rcc/qmlcache/module_appgui.aotstats
 .rcc/qmlcache/module_appgui.aotstats: .rcc/qmlcache/appgui_components/NavButton_qml.cpp.aotstats
 .rcc/qmlcache/module_appgui.aotstats: .rcc/qmlcache/appgui_components/NavBar_qml.cpp.aotstats
 .rcc/qmlcache/module_appgui.aotstats: .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.aotstats
+.rcc/qmlcache/module_appgui.aotstats: .rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.aotstats
+.rcc/qmlcache/module_appgui.aotstats: .rcc/qmlcache/appgui_components/UartInterface_qml.cpp.aotstats
 .rcc/qmlcache/module_appgui.aotstats: .rcc/qmlcache/module_appgui.aotstatslist
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Generating .rcc/qmlcache/module_appgui.aotstats"
 	call .qt\bin\qt_setup_tool_path.bat D:/Qt/6.11.1/mingw_64/bin/qmlaotstats.exe aggregate "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/module_appgui.aotstatslist" "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/module_appgui.aotstats"
@@ -90,6 +92,21 @@ CMakeFiles/module_appgui_aotstats_target: .rcc/qmlcache/module_appgui.aotstats
 .rcc/qmlcache/appgui_Main_qml.cpp.aotstats: .rcc/qmlcache/appgui_Main_qml.cpp
 	@$(CMAKE_COMMAND) -E touch_nocreate .rcc\qmlcache\appgui_Main_qml.cpp.aotstats
 
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp: D:/Qt/6.11.1/mingw_64/bin/qmlcachegen.exe
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/ConfigPage.qml
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp: .qt/rcc/qmake_gui.qrc
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp: .qt/rcc/appgui_raw_qml_0.qrc
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp: .qt/rcc/appgui_raw_res_0.qrc
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp: .qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp: gui/appgui.qmltypes
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp: gui/qmldir
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Generating .rcc/qmlcache/appgui_components/ConfigPage_qml.cpp, .rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.aotstats"
+	D:\Qt\Tools\CMake_64\bin\cmake.exe -E make_directory "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components"
+	call .qt\bin\qt_setup_tool_path.bat D:/Qt/6.11.1/mingw_64/bin/qmlcachegen.exe --bare --resource-path /qt/qml/gui/components/ConfigPage.qml -I "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug" -I D:/Qt/6.11.1/mingw_64/qml -i "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/qmldir" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/qmake_gui.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_res_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc" --dump-aot-stats --module-id=gui(appgui) -o "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp" "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/ConfigPage.qml"
+
+.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.aotstats: .rcc/qmlcache/appgui_components/ConfigPage_qml.cpp
+	@$(CMAKE_COMMAND) -E touch_nocreate .rcc\qmlcache\appgui_components\ConfigPage_qml.cpp.aotstats
+
 .rcc/qmlcache/appgui_components/NavBar_qml.cpp: D:/Qt/6.11.1/mingw_64/bin/qmlcachegen.exe
 .rcc/qmlcache/appgui_components/NavBar_qml.cpp: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/NavBar.qml
 .rcc/qmlcache/appgui_components/NavBar_qml.cpp: .qt/rcc/qmake_gui.qrc
@@ -98,7 +115,7 @@ CMakeFiles/module_appgui_aotstats_target: .rcc/qmlcache/module_appgui.aotstats
 .rcc/qmlcache/appgui_components/NavBar_qml.cpp: .qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc
 .rcc/qmlcache/appgui_components/NavBar_qml.cpp: gui/appgui.qmltypes
 .rcc/qmlcache/appgui_components/NavBar_qml.cpp: gui/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Generating .rcc/qmlcache/appgui_components/NavBar_qml.cpp, .rcc/qmlcache/appgui_components/NavBar_qml.cpp.aotstats"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Generating .rcc/qmlcache/appgui_components/NavBar_qml.cpp, .rcc/qmlcache/appgui_components/NavBar_qml.cpp.aotstats"
 	D:\Qt\Tools\CMake_64\bin\cmake.exe -E make_directory "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components"
 	call .qt\bin\qt_setup_tool_path.bat D:/Qt/6.11.1/mingw_64/bin/qmlcachegen.exe --bare --resource-path /qt/qml/gui/components/NavBar.qml -I "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug" -I D:/Qt/6.11.1/mingw_64/qml -i "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/qmldir" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/qmake_gui.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_res_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc" --dump-aot-stats --module-id=gui(appgui) -o "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/NavBar_qml.cpp" "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/NavBar.qml"
 
@@ -113,7 +130,7 @@ CMakeFiles/module_appgui_aotstats_target: .rcc/qmlcache/module_appgui.aotstats
 .rcc/qmlcache/appgui_components/NavButton_qml.cpp: .qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc
 .rcc/qmlcache/appgui_components/NavButton_qml.cpp: gui/appgui.qmltypes
 .rcc/qmlcache/appgui_components/NavButton_qml.cpp: gui/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Generating .rcc/qmlcache/appgui_components/NavButton_qml.cpp, .rcc/qmlcache/appgui_components/NavButton_qml.cpp.aotstats"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Generating .rcc/qmlcache/appgui_components/NavButton_qml.cpp, .rcc/qmlcache/appgui_components/NavButton_qml.cpp.aotstats"
 	D:\Qt\Tools\CMake_64\bin\cmake.exe -E make_directory "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components"
 	call .qt\bin\qt_setup_tool_path.bat D:/Qt/6.11.1/mingw_64/bin/qmlcachegen.exe --bare --resource-path /qt/qml/gui/components/NavButton.qml -I "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug" -I D:/Qt/6.11.1/mingw_64/qml -i "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/qmldir" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/qmake_gui.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_res_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc" --dump-aot-stats --module-id=gui(appgui) -o "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/NavButton_qml.cpp" "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/NavButton.qml"
 
@@ -128,21 +145,40 @@ CMakeFiles/module_appgui_aotstats_target: .rcc/qmlcache/module_appgui.aotstats
 .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp: .qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc
 .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp: gui/appgui.qmltypes
 .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp: gui/qmldir
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Generating .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp, .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.aotstats"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Generating .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp, .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.aotstats"
 	D:\Qt\Tools\CMake_64\bin\cmake.exe -E make_directory "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components"
 	call .qt\bin\qt_setup_tool_path.bat D:/Qt/6.11.1/mingw_64/bin/qmlcachegen.exe --bare --resource-path /qt/qml/gui/components/PinoutInterface.qml -I "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug" -I D:/Qt/6.11.1/mingw_64/qml -i "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/qmldir" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/qmake_gui.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_res_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc" --dump-aot-stats --module-id=gui(appgui) -o "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp" "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml"
 
 .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.aotstats: .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp
 	@$(CMAKE_COMMAND) -E touch_nocreate .rcc\qmlcache\appgui_components\PinoutInterface_qml.cpp.aotstats
 
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp: D:/Qt/6.11.1/mingw_64/bin/qmlcachegen.exe
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp: C:/Users/rfick/Desktop/Embedded\ Systems/avr-firmware-control/GUI/gui/components/UartInterface.qml
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp: .qt/rcc/qmake_gui.qrc
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp: .qt/rcc/appgui_raw_qml_0.qrc
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp: .qt/rcc/appgui_raw_res_0.qrc
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp: .qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp: gui/appgui.qmltypes
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp: gui/qmldir
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir="C:\Users\rfick\Desktop\Embedded Systems\avr-firmware-control\GUI\gui\build\Desktop_Qt_6_11_1_MinGW_64_bit_Debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Generating .rcc/qmlcache/appgui_components/UartInterface_qml.cpp, .rcc/qmlcache/appgui_components/UartInterface_qml.cpp.aotstats"
+	D:\Qt\Tools\CMake_64\bin\cmake.exe -E make_directory "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components"
+	call .qt\bin\qt_setup_tool_path.bat D:/Qt/6.11.1/mingw_64/bin/qmlcachegen.exe --bare --resource-path /qt/qml/gui/components/UartInterface.qml -I "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug" -I D:/Qt/6.11.1/mingw_64/qml -i "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/gui/qmldir" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/qmake_gui.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_res_0.qrc" --resource "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.qt/rcc/appgui_raw_qml_0_extra_qmldirs.qrc" --dump-aot-stats --module-id=gui(appgui) -o "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp" "C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/UartInterface.qml"
+
+.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.aotstats: .rcc/qmlcache/appgui_components/UartInterface_qml.cpp
+	@$(CMAKE_COMMAND) -E touch_nocreate .rcc\qmlcache\appgui_components\UartInterface_qml.cpp.aotstats
+
 module_appgui_aotstats_target: .rcc/qmlcache/appgui_Main_qml.cpp
 module_appgui_aotstats_target: .rcc/qmlcache/appgui_Main_qml.cpp.aotstats
+module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/ConfigPage_qml.cpp
+module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.aotstats
 module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/NavBar_qml.cpp
 module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/NavBar_qml.cpp.aotstats
 module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/NavButton_qml.cpp
 module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/NavButton_qml.cpp.aotstats
 module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp
 module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.aotstats
+module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/UartInterface_qml.cpp
+module_appgui_aotstats_target: .rcc/qmlcache/appgui_components/UartInterface_qml.cpp.aotstats
 module_appgui_aotstats_target: .rcc/qmlcache/module_appgui.aotstats
 module_appgui_aotstats_target: CMakeFiles/module_appgui_aotstats_target
 module_appgui_aotstats_target: CMakeFiles/module_appgui_aotstats_target.dir/build.make

@@ -34,6 +34,8 @@ qt_add_qml_module(appgui
         components/NavButton.qml
         components/NavBar.qml
         components/PinoutInterface.qml
+        components/ConfigPage.qml
+        components/UartInterface.qml
     SOURCES
         pinloader.h
         pinloader.cpp
@@ -43,6 +45,7 @@ qt_add_qml_module(appgui
         images/adc_icon.gif
         images/pinout_icon.png
         images/uart_icon.png
+        images/timer_icon.png
 )
 
 target_link_libraries(appgui

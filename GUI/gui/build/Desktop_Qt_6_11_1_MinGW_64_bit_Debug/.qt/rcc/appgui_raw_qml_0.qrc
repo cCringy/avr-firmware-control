@@ -4,6 +4,8 @@
     <file alias="components/NavButton.qml">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/NavButton.qml</file>
     <file alias="components/NavBar.qml">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/NavBar.qml</file>
     <file alias="components/PinoutInterface.qml">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/PinoutInterface.qml</file>
+    <file alias="components/ConfigPage.qml">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/ConfigPage.qml</file>
+    <file alias="components/UartInterface.qml">C:/Users/rfick/Desktop/Embedded Systems/avr-firmware-control/GUI/gui/components/UartInterface.qml</file>
   </qresource>
 </RCC>
 

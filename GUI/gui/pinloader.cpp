@@ -17,8 +17,12 @@ QVariantList PinLoader::loadPins(const QString &path,qreal imageWidth,qreal imag
     }
 
     auto doc = QJsonDocument::fromJson(file.readAll());
+    QJsonObject root = doc.object();
 
-    for(const auto &val : doc.array()){
+    double pinWidth = root.value("pinWidth").toDouble();
+    double pinHeight = root.value("pinHeight").toDouble();
+
+    for(const auto &val : root.value("pins").toArray()){
         QJsonObject jObj = val.toObject();
         QVariantMap pin;
         pin["name"] = jObj.value("name").toString();

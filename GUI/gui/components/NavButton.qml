@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
 
 Button {
     id: root
@@ -57,6 +58,19 @@ Button {
              : root.pressed ? color_pressed
              : root.hovered ? color_hovered
              : color_normal
+
+        // Quelle für den Schatten muss "layer" sein
+        layer.enabled: root.expanded
+        layer.effect: MultiEffect {
+            shadowEnabled: true
+            shadowColor: "#80000000"   // ARGB, halbtransparent
+            shadowBlur: 0.6            // 0..1
+            shadowHorizontalOffset: 4
+            shadowVerticalOffset: 4
+            shadowOpacity: root.hovered || root.expanded ? 0.8 : 0.4
+            // sanfter Übergang beim Hover
+            Behavior on shadowOpacity { NumberAnimation { duration: 150 } }
+        }
     }
 
     contentItem: Item {

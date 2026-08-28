@@ -5,8 +5,7 @@
 		"commands" : 
 		[
 			"add_custom_target",
-			"_qt_internal_deferred_aotstats_setup",
-			"add_dependencies"
+			"_qt_internal_deferred_aotstats_setup"
 		],
 		"files" : 
 		[
@@ -33,13 +32,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 1326,
-				"parent" : 2
-			},
-			{
-				"command" : 2,
-				"file" : 0,
-				"line" : 1331,
+				"line" : 1387,
 				"parent" : 2
 			}
 		]
@@ -47,19 +40,14 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 4,
-			"id" : "appgui_qmltyperegistration::@6890427a1f51a3e7e1df"
+			"id" : "module_appgui_aotstats_target::@6890427a1f51a3e7e1df"
 		},
 		{
 			"id" : "appgui_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
 		}
 	],
-	"folder" : 
-	{
-		"name" : "QtInternalTargets"
-	},
-	"id" : "module_appgui_aotstats_target::@6890427a1f51a3e7e1df",
-	"name" : "module_appgui_aotstats_target",
+	"id" : "all_aotstats::@6890427a1f51a3e7e1df",
+	"name" : "all_aotstats",
 	"paths" : 
 	{
 		"build" : ".",
@@ -88,7 +76,10 @@
 				8,
 				9,
 				10,
-				11
+				11,
+				12,
+				13,
+				14
 			]
 		}
 	],
@@ -97,13 +88,19 @@
 		{
 			"backtrace" : 3,
 			"isGenerated" : true,
-			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/module_appgui_aotstats_target",
+			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/all_aotstats",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/module_appgui_aotstats_target.rule",
+			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/CMakeFiles/all_aotstats.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/all_aotstats.aotstats.rule",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -116,6 +113,12 @@
 			"backtrace" : 0,
 			"isGenerated" : true,
 			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_Main_qml.cpp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/ConfigPage_qml.cpp.rule",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -134,6 +137,12 @@
 			"backtrace" : 0,
 			"isGenerated" : true,
 			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/PinoutInterface_qml.cpp.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_11_1_MinGW_64_bit_Debug/.rcc/qmlcache/appgui_components/UartInterface_qml.cpp.rule",
 			"sourceGroupIndex" : 1
 		},
 		{
