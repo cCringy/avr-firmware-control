@@ -1,4 +1,3 @@
-
 #include <inttypes.h>
 
 void printBitSequence(uint8_t value);
