@@ -1,4 +1,5 @@
 #include <bit_manipulation.h>
+#include <stdio.h>
 
 void printBitSequence(uint8_t value){
 	for(int i = 7 ; i >= 0; i--){

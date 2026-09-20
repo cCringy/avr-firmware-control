@@ -3,6 +3,7 @@
 
 #include <avr/io.h>
 #include <inttypes.h>
+#include "status.h"
 
 #define HIGH 0x1
 #define LOW 0x0
@@ -25,16 +26,16 @@ typedef enum GPIO_port {
 } gpio_port_t;
 
 // configuration
-void GPIO_set_input(gpio_port_t port, gpio_pin_t pin);
-void GPIO_set_output(gpio_port_t port, gpio_pin_t pin);
-void GPIO_set_pullup(gpio_port_t port, gpio_pin_t pin);
+status_t GPIO_set_input(gpio_port_t port, gpio_pin_t pin);
+status_t GPIO_set_output(gpio_port_t port, gpio_pin_t pin);
+status_t GPIO_set_pullup(gpio_port_t port, gpio_pin_t pin);
 
 // writing pins
-void GPIO_set_pin_high(gpio_port_t port, gpio_pin_t pin);
-void GPIO_set_pin_low(gpio_port_t port, gpio_pin_t pin);
-void GPIO_toggle_pin(gpio_port_t port, gpio_pin_t pin);
+status_t GPIO_set_pin_high(gpio_port_t port, gpio_pin_t pin);
+status_t GPIO_set_pin_low(gpio_port_t port, gpio_pin_t pin);
+status_t GPIO_toggle_pin(gpio_port_t port, gpio_pin_t pin);
 
 // reading pins
-uint8_t GPIO_read_pin(gpio_port_t port, gpio_pin_t pin);
+status_t GPIO_read_pin(gpio_port_t port, gpio_pin_t pin, uint8_t *value);
 
 #endif /* GPIO_H_ */

@@ -1,11 +1,9 @@
 #include "adc.h"
 #include <avr/interrupt.h>
-#include "debug_uart.h"
 
-static FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar,_FDEV_SETUP_RW);
 static void (*adc_callback)(uint16_t) = 0;
 
-inline void ADC_select_channel(uint8_t channel){
+inline void ADC_select_channel(adc_channel_t channel){
     ADMUX &= 0b11110000; // delete prev channel selection
     ADMUX |= channel;
 }
@@ -31,13 +29,19 @@ void ADC_init(void){
 }
 
 
-uint16_t ADC_poll(uint8_t channel){
+status_t ADC_poll(adc_channel_t channel, uint16_t *result){
     ADC_select_channel(channel);
     ADC_start_conversion();
 
-    while (ADCSRA & (1<<ADSC)){/*wait for conversion to end and do nothing*/}
+    uint16_t timeout = 10000; // datasheet: worst case ~25 ADC clock cycles per conversion
+    while ((ADCSRA & (1<<ADSC)) && --timeout){/*wait for conversion to end and do nothing*/}
 
-    return ADC_fetch_conversion();
+    if (timeout == 0){
+        return STATUS_ERR_TIMEOUT;
+    }
+
+    *result = ADC_fetch_conversion();
+    return STATUS_OK;
 }
 
 void ADC_enable_interrupt(void){

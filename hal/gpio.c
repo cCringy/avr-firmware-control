@@ -1,6 +1,6 @@
 #include "gpio.h"
 
-void GPIO_set_input(gpio_port_t port, gpio_pin_t pin)
+status_t GPIO_set_input(gpio_port_t port, gpio_pin_t pin)
 {
     switch (port)
     {
@@ -14,11 +14,12 @@ void GPIO_set_input(gpio_port_t port, gpio_pin_t pin)
         DDRD &= ~(1 << pin);
         break;
     default:
-        break;
+        return STATUS_ERR_PARAM;
     }
+    return STATUS_OK;
 }
 
-void GPIO_set_output(gpio_port_t port, gpio_pin_t pin)
+status_t GPIO_set_output(gpio_port_t port, gpio_pin_t pin)
 {
     switch (port)
     {
@@ -32,11 +33,12 @@ void GPIO_set_output(gpio_port_t port, gpio_pin_t pin)
         DDRD |= (1 << pin);
         break;
     default:
-        break;
+        return STATUS_ERR_PARAM;
     }
+    return STATUS_OK;
 }
 
-void GPIO_set_pullup(gpio_port_t port, gpio_pin_t pin)
+status_t GPIO_set_pullup(gpio_port_t port, gpio_pin_t pin)
 {
     switch (port)
     {
@@ -53,11 +55,12 @@ void GPIO_set_pullup(gpio_port_t port, gpio_pin_t pin)
         PORTD |= (1 << pin);
         break;
     default:
-        break;
+        return STATUS_ERR_PARAM;
     }
+    return STATUS_OK;
 }
 
-void GPIO_set_pin_high(gpio_port_t port, gpio_pin_t pin)
+status_t GPIO_set_pin_high(gpio_port_t port, gpio_pin_t pin)
 {
     switch (port)
     {
@@ -71,11 +74,12 @@ void GPIO_set_pin_high(gpio_port_t port, gpio_pin_t pin)
         PORTD |= (1 << pin);
         break;
     default:
-        break;
+        return STATUS_ERR_PARAM;
     }
+    return STATUS_OK;
 }
 
-void GPIO_set_pin_low(gpio_port_t port, gpio_pin_t pin)
+status_t GPIO_set_pin_low(gpio_port_t port, gpio_pin_t pin)
 {
     switch (port)
     {
@@ -89,11 +93,12 @@ void GPIO_set_pin_low(gpio_port_t port, gpio_pin_t pin)
         PORTD &= ~(1 << pin);
         break;
     default:
-        break;
+        return STATUS_ERR_PARAM;
     }
+    return STATUS_OK;
 }
 
-void GPIO_toggle_pin(gpio_port_t port, gpio_pin_t pin)
+status_t GPIO_toggle_pin(gpio_port_t port, gpio_pin_t pin)
 {
     switch (port)
     {
@@ -107,21 +112,26 @@ void GPIO_toggle_pin(gpio_port_t port, gpio_pin_t pin)
         PORTD ^= (1 << pin);
         break;
     default:
-        break;
+        return STATUS_ERR_PARAM;
     }
+    return STATUS_OK;
 }
 
-uint8_t GPIO_read_pin(gpio_port_t port, gpio_pin_t pin)
+status_t GPIO_read_pin(gpio_port_t port, gpio_pin_t pin, uint8_t *value)
 {
     switch (port)
     {
     case B:
-        return (PINB & (1 << pin))?HIGH:LOW;
+        *value = (PINB & (1 << pin)) ? HIGH : LOW;
+        break;
     case C:
-        return (PINC & (1 << pin))?HIGH:LOW;
+        *value = (PINC & (1 << pin)) ? HIGH : LOW;
+        break;
     case D:
-        return (PIND & (1 << pin))?HIGH:LOW;
+        *value = (PIND & (1 << pin)) ? HIGH : LOW;
+        break;
     default:
-        return -1;
+        return STATUS_ERR_PARAM;
     }
+    return STATUS_OK;
 }

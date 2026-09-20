@@ -1,9 +1,17 @@
 #include "board_config.h"
 
+
 static const config_t cfg = {
-    .uart_baud = 115200,
-    .uart_mode = UART_ASYNC,
-  
+    .uart = {
+        .baudrate = 9600,
+        .mode = UART_MODE_ASYNC,
+        .framesize = UART_FRAME_SIZE_8,
+        .parity = UART_PARITY_DISABLED,
+        .two_stop_bits = 0,
+        .async_double_speed = 0,
+    }
 };
 
-const config_t* board_config(void) { return &cfg; }
+const config_t * get_config(void){
+  return &cfg;
+}

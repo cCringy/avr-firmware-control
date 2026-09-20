@@ -1,5 +1,6 @@
 #include "uart.h"
 #include "uart_internal.h"
+#include "board_config.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
