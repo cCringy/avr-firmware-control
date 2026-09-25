@@ -65,3 +65,7 @@ void ADC_handle_Interrupt(void){
         adc_callback(adcval);
     }
 }
+
+ISR(ADC_vect){
+  ADC_handle_Interrupt();
+}

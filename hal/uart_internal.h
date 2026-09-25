@@ -2,10 +2,11 @@
 #define UART_INTERNAL_H
 
 #include <stdint.h>
+#include "uart.h"
 
-void     uart_transmit8(uint8_t data);
-void     uart_transmit9(uint16_t data);
-uint8_t  uart_receive8(void);
-uint16_t uart_receive9(void);
+status_t      uart_transmit8(uint8_t data);
+status_t      uart_transmit9(uint16_t data);
+uart_result_t uart_receive8(uint8_t *data);
+uart_result_t uart_receive9(uint16_t *data);
 
 #endif

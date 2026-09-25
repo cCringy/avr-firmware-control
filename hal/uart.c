@@ -5,7 +5,11 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 
-static uint8_t uart_last_error = 0;
+// Generous safety-net bound for the UDRE0/RXC0/TXC0 busy-waits below. Unlike
+// ADC_poll's timeout (a fixed conversion clock count from the datasheet), the
+// real worst case here depends on the runtime-configured baud rate, so this
+// isn't computed -- just large enough that a correctly wired UART never hits it.
+#define UART_TIMEOUT_LOOPS 50000u
 
 /*
 uart_operating_mode = 0 : Asynchronous normal mode (U2Xn = 0)
@@ -23,11 +27,11 @@ void set_data_frame_size(framesize_t * framesize){
 }
 
 #if UART_FRAMESIZE == 9
-  void uart_transmit(uint16_t data) { uart_transmit9(data);}
-  uint16_t uart_receive(void)       { return uart_receive9();}
+  status_t      uart_transmit(uint16_t data)     { return uart_transmit9(data);}
+  uart_result_t uart_receive(uint16_t *data)     { return uart_receive9(data);}
 #else
-  void uart_transmit(uint8_t data) { uart_transmit8(data);}
-  uint8_t uart_receive(void)       { return uart_receive8();}
+  status_t      uart_transmit(uint8_t data)      { return uart_transmit8(data);}
+  uart_result_t uart_receive(uint8_t *data)      { return uart_receive8(data);}
 #endif
 
 void
@@ -120,16 +124,20 @@ uart_init(uart_config_t *config){
   SREG = sreg_backup;
 }
 
-void
+status_t
 uart_reinit(uart_config_t *config){
-  /* Falls init noch nie aufgerufen TXC0  noch nie gesetzt und while könnte
-  sich aufhängen*/
-  if (!(UCSR0B & ((1 << RXEN0) | (1 << TXEN0)))) return;
+  /* Falls init noch nie aufgerufen TXC0 noch nie gesetzt und while könnte
+  sich aufhängen -- caller must have called uart_init first */
+  if (!(UCSR0B & ((1 << RXEN0) | (1 << TXEN0)))) return STATUS_ERR_PARAM;
   // Vor Re-Init sicherstellen: kein laufender Transfer, kein ungelesenes RX-Byte
   uart_flush();
-  while ( !(UCSR0A & (1 << TXC0)));
+
+  uint16_t timeout = UART_TIMEOUT_LOOPS;
+  while (!(UCSR0A & (1 << TXC0)) && --timeout){/*wait for pending transmit to complete*/}
+  if (timeout == 0) return STATUS_ERR_TIMEOUT;
 
   uart_init(config);
+  return STATUS_OK;
 }
 
 // void
@@ -150,25 +158,41 @@ uart_reinit(uart_config_t *config){
 //   UDR0 = (uint8_t) data;
 // }
 
+// Maps the raw UCSR0A error flags for a just-received byte to the
+// independent UART_ERR_* bitmask (see uart.h) -- no priority imposed here,
+// callers decide which bit(s) they care about.
+static uint8_t uart_link_errors(uint8_t status_reg){
+    uint8_t errors = 0;
+    if (status_reg & (1 << DOR0)) errors |= UART_ERR_OVERRUN;
+    if (status_reg & (1 << FE0))  errors |= UART_ERR_FRAME;
+    if (status_reg & (1 << UPE0)) errors |= UART_ERR_PARITY;
+    return errors;
+}
+
 /* Überträgt Daten im 5- bis 8-Bit-UART-Modus */
-void uart_transmit8(uint8_t data)
+status_t uart_transmit8(uint8_t data)
 {
     /* Warten bis Sendepuffer frei ist */
-    while (!(UCSR0A & (1 << UDRE0)));
+    uint16_t timeout = UART_TIMEOUT_LOOPS;
+    while (!(UCSR0A & (1 << UDRE0)) && --timeout){}
+    if (timeout == 0) return STATUS_ERR_TIMEOUT;
 
     /* TX Complete Flag löschen */
     UCSR0A |= (1 << TXC0);
 
     /* Daten senden */
     UDR0 = data;
+    return STATUS_OK;
 }
 
 
 /* Überträgt Daten im 9-Bit-UART-Modus */
-void uart_transmit9(uint16_t data)
+status_t uart_transmit9(uint16_t data)
 {
     /* Warten bis Sendepuffer frei ist */
-    while (!(UCSR0A & (1 << UDRE0)));
+    uint16_t timeout = UART_TIMEOUT_LOOPS;
+    while (!(UCSR0A & (1 << UDRE0)) && --timeout){}
+    if (timeout == 0) return STATUS_ERR_TIMEOUT;
 
     /* 9. Bit setzen oder löschen */
     if (data & 0x0100)
@@ -181,34 +205,48 @@ void uart_transmit9(uint16_t data)
 
     /* Untere 8 Bit senden */
     UDR0 = (uint8_t)data;
+    return STATUS_OK;
 }
 
-uint8_t 
-uart_receive8(void){
+uart_result_t
+uart_receive8(uint8_t *data){
+  uart_result_t result = { STATUS_OK, 0 };
+
   /* Wait for data to be received */
-  while (!(UCSR0A & (1<<RXC0)));
+  uint16_t timeout = UART_TIMEOUT_LOOPS;
+  while (!(UCSR0A & (1<<RXC0)) && --timeout){}
+  if (timeout == 0){
+    result.status = STATUS_ERR_TIMEOUT;
+    return result;
+  }
 
-  uint8_t status = UCSR0A;
-  uint8_t data   = UDR0;
+  uint8_t status_reg = UCSR0A;
+  *data = UDR0;
 
-  uart_last_error = status & ((1<<FE0) | (1<<DOR0) | (1<<UPE0));
-
-  return data;
+  result.link_errors = uart_link_errors(status_reg);
+  return result;
 }
 
-uint16_t 
-uart_receive9(void){
+uart_result_t
+uart_receive9(uint16_t *data){
+  uart_result_t result = { STATUS_OK, 0 };
 
-  while (!(UCSR0A & (1<<RXC0)));
+  uint16_t timeout = UART_TIMEOUT_LOOPS;
+  while (!(UCSR0A & (1<<RXC0)) && --timeout){}
+  if (timeout == 0){
+    result.status = STATUS_ERR_TIMEOUT;
+    return result;
+  }
 
-  uint8_t status = UCSR0A;  // 
+  uint8_t status_reg = UCSR0A;
   uint8_t resh   = UCSR0B;
   uint8_t resl   = UDR0;
 
-  uart_last_error = status & ((1<<FE0) | (1<<DOR0) | (1<<UPE0));
   /* Filter the 9th bit, then return */
+  *data = (uint16_t) (((resh >> RXB80 )&1) << 8) | resl;
 
-  return (uint16_t) (((resh >> RXB80 )&1) << 8) | resl;
+  result.link_errors = uart_link_errors(status_reg);
+  return result;
 }
 
 void uart_flush(void) {
@@ -225,18 +263,11 @@ uart_data_available(void){
 }
 
 
-uint8_t
-uart_get_error(void){
-  return uart_last_error;
-}
-
-void
-uart_clear_error(void){
-  uart_last_error=0;
-}
-
-void uart_print(const char * str){
+status_t uart_print(const char * str){
+  status_t result = STATUS_OK;
   while(*str){
-    uart_transmit((uint8_t)*str++);
+    result = uart_transmit((uint8_t)*str++);
+    if (result != STATUS_OK) return result;
   }
+  return result;
 }

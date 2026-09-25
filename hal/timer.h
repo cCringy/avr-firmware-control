@@ -9,6 +9,7 @@
 #endif
 
 status_t timer_init_timer1(uint16_t milliseconds);
+void timer_set_interruptfunction();
 void timer_stop(void);
 
 #endif

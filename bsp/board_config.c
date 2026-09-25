@@ -3,7 +3,7 @@
 
 static const config_t cfg = {
     .uart = {
-        .baudrate = 9600,
+        .baudrate = BAUDRATE,
         .mode = UART_MODE_ASYNC,
         .framesize = UART_FRAME_SIZE_8,
         .parity = UART_PARITY_DISABLED,

@@ -2,6 +2,7 @@
 #define UART_H
 
 #include <stdint.h>
+#include "status.h"
 
 #ifndef UART_FRAMESIZE
   #error "UART_FRAMESIZE must be defined by Build-System"
@@ -46,21 +47,30 @@ typedef struct {
 
 } uart_config_t;
 
-void uart_init(uart_config_t *config);
-void uart_reinit(uart_config_t *config);
+// Raw link-layer error bits observed on a received byte (from UCSR0A).
+// More than one can be set at once, so they're independent flags, not an
+// exclusive status_t code -- the caller decides which one(s) matter to them.
+#define UART_ERR_OVERRUN (1 << 0)
+#define UART_ERR_FRAME   (1 << 1)
+#define UART_ERR_PARITY  (1 << 2)
+
+typedef struct {
+    status_t status;      // transport result: STATUS_OK or STATUS_ERR_TIMEOUT
+    uint8_t  link_errors;  // bitmask of UART_ERR_* flags for the byte received (0 if none)
+} uart_result_t;
+
+void     uart_init(uart_config_t *config);
+status_t uart_reinit(uart_config_t *config);
 #if UART_FRAMESIZE == 9
-  void     uart_transmit(uint16_t data);
-  uint16_t uart_receive(void);
+  status_t      uart_transmit(uint16_t data);
+  uart_result_t uart_receive(uint16_t *data);
 #else
-  void     uart_transmit(uint8_t data);
-  uint8_t  uart_receive(void);
+  status_t      uart_transmit(uint8_t data);
+  uart_result_t uart_receive(uint8_t *data);
 #endif
 
-void    uart_flush(void);
-uint8_t uart_data_available(void);
-void    uart_print(const char *str);
-
-uint8_t uart_get_error(void);
-void    uart_clear_error(void);
+void     uart_flush(void);
+uint8_t  uart_data_available(void);
+status_t uart_print(const char *str);
 
 #endif
