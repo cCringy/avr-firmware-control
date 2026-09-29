@@ -37,13 +37,14 @@ typedef enum Timer{
 
 typedef enum TimerModes{
   NORMAL,
-  CTC,
+  CTC, 
   FAST_PWM,
   PHASE_CORRECT_PWM,
-  PHASE_FREQ_CORRECT_PWM
+  PHASE_FREQ_CORRECT_PWM,
 }timer_mode_t;
-status_t timer_init_timer1(uint16_t milliseconds);
-void timer_set_interruptfunction();
-void timer_stop(void);
+
+status_t timer_init_timer(timer_t timer);
+status_t timer_stop(timer_t timer);
+void timer_set_interruptfunction(void);
 
 #endif

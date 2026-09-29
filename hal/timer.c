@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <math.h>
 
+// use makro like function for timer such that registers like TCCRnB can be optimized without 500 if statements
 static uint16_t configure_pre_and_return_top(uint16_t milliseconds);
 
 static void (*timer_callback)(uint16_t) = 0;
@@ -17,24 +17,25 @@ void timer_set_interrupt_callback(void (*isr)(uint16_t)){
   timer_callback = isr;
 }
 
-status_t timer_init_timer1(uint16_t milliseconds){
-    if (milliseconds == 0){
-        return STATUS_ERR_PARAM;
-    }
-
-    cli();
+status_t timer_init_timer(timer_t timer){
     TCCR1A = 0; // Lösche potentielle Voreinstellungen (e.g. PWM etc)
     TCCR1B = 0; // Lösche potentielle Voreinstellungen (e.g. PWM etc)
 
-    TCCR1B |= (1<<WGM12);  // Enable CTC Mode
-
-    TIMSK1 |= (1<<OCIE1A); // Enable Interrupts bei Compare Match mit TOP in OCR1A
-
-    OCR1A = configure_pre_and_return_top(milliseconds); // setze TOP
-    sei();
-
-    return STATUS_OK;
+    timer_set_mode(timer, NORMAL);
 }
+
+status_t timer_set_mode(timer_t timer, timer_mode_t mode){
+  switch(timer){
+    case TIMER_COUNTER_0:
+      break;
+    case TIMER_COUNTER_1:
+      break;
+    case TIMER_COUNTER_2:
+      break;
+    default:
+      return STATUS_ERR_PARAM;
+  }
+} 
 
 static uint16_t configure_pre_and_return_top(uint16_t milliseconds){
     //gegeben
@@ -91,8 +92,19 @@ void timer_init_timer1_pwm(){
     sei();
 }
 
-void timer_stop(){
-    TCCR1B &= 0b11111000;
+status_t timer_stop(timer_t timer){
+    if(timer == TIMER_COUNTER_0){
+      TCCR0B &= 0b00000111;
+      return STATUS_OK;
+    }else if(timer == TIMER_COUNTER_1){
+      TCCR1B &= 0b00000111;
+      return STATUS_OK;
+    }else if(timer == TIMER_COUNTER_2){
+      TCCR2B &= 0b00000111;
+      return STATUS_OK;
+    }else{
+      return STATUS_ERR_PARAM;
+    }
 }
 
 uint16_t timer_fetch_comp(){
@@ -105,5 +117,5 @@ void setTopValue(uint16_t top){
 }
 */
 ISR(TIMER1_COMPA_vect){
-  timer_callback();
+
 }
