@@ -13,7 +13,7 @@ void timer_handle_compare(uint16_t compare_value){
   timer_callback(compare_value);
 }
 
-void timer_set_interruptfunction(void (*isr)(uint16_t)){
+void timer_set_interrupt_callback(void (*isr)(uint16_t)){
   timer_callback = isr;
 }
 
@@ -93,6 +93,10 @@ void timer_init_timer1_pwm(){
 
 void timer_stop(){
     TCCR1B &= 0b11111000;
+}
+
+uint16_t timer_fetch_comp(){
+
 }
 /*
 void setTopValue(uint16_t top){

@@ -140,24 +140,6 @@ uart_reinit(uart_config_t *config){
   return STATUS_OK;
 }
 
-// void
-// uart_transmit(uint16_t data){
-//   /* Wait for empty transmit buffer */
-//   while (!(UCSR0A & (1<<UDRE0)));
-  
-  
-//   if(UCSR0B & 1<<UCSZ02){
-//     /* Copy 9th bit to TXB8 */
-//     UCSR0B &= ~(1<<TXB80);
-//     if (data & 0x0100){
-//       UCSR0B |= (1<<TXB80);
-//     }
-//   }
-//   /* Put data into buffer, sends the data */
-//   UCSR0A |= (1<<TXC0);
-//   UDR0 = (uint8_t) data;
-// }
-
 // Maps the raw UCSR0A error flags for a just-received byte to the
 // independent UART_ERR_* bitmask (see uart.h) -- no priority imposed here,
 // callers decide which bit(s) they care about.
