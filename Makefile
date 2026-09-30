@@ -5,18 +5,17 @@ PROGRAMMER_ARGS = -P COM9
 BUILD_DIR = build
 
 # Arduino IDE bringt avr-gcc/avrdude schon mit, sie liegen nur nicht im PATH
-GCC_DIR = /c/Users/rfick/AppData/Local/Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin
-AVRDUDE_DIR = /c/Users/rfick/AppData/Local/Arduino15/packages/arduino/tools/avrdude/6.3.0-arduino17
+GCC_DIR = /d/avr-gcc/bin
 
 CC = "$(GCC_DIR)/avr-gcc.exe"
 OBJCOPY = "$(GCC_DIR)/avr-objcopy.exe"
-AVRDUDE = "$(AVRDUDE_DIR)/bin/avrdude.exe" -C "$(AVRDUDE_DIR)/etc/avrdude.conf"
+AVRDUDE = "$(GCC_DIR)/avrdude.exe" -C "$(GCC_DIR)/avrdude.conf"
 
 UART_FRAMESIZE ?= 8
 
 CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -DUART_FRAMESIZE=$(UART_FRAMESIZE)
 CFLAGS += -Iapp -Ibsp -Ihal -Idsp -Iutil
-
+CFLAGS += -std=gnu23 -Wall -Wextra
 # alle .c Dateien aus diesen Ordnern einsammeln
 SRCS = $(wildcard app/*.c bsp/*.c hal/*.c dsp/*.c util/*.c)
 # jede z.B. hal/gpio.c wird zu build/hal/gpio.o
