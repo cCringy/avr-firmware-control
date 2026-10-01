@@ -15,7 +15,11 @@ UART_FRAMESIZE ?= 8
 
 CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -DUART_FRAMESIZE=$(UART_FRAMESIZE)
 CFLAGS += -Iapp -Ibsp -Ihal -Idsp -Iutil
-CFLAGS += -std=gnu23 -Wall -Wextra
+# Warnings
+CFLAGS += -std=gnu99 -Wall -Wextra
+# Optimizations
+CFLAGS += -Os
+
 # alle .c Dateien aus diesen Ordnern einsammeln
 SRCS = $(wildcard app/*.c bsp/*.c hal/*.c dsp/*.c util/*.c)
 # jede z.B. hal/gpio.c wird zu build/hal/gpio.o

@@ -15,7 +15,7 @@
                 "F_CPU=16000000UL",
                 "UART_FRAMESIZE=8"
             ],
-            "cStandard": "c23",
+            "cStandard": "gnu99",
             "intelliSenseMode": "gcc-x64"
         }
     ],
