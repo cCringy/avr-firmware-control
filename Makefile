@@ -18,7 +18,7 @@ CFLAGS += -Iapp -Ibsp -Ihal -Idsp -Iutil
 # Warnings
 CFLAGS += -std=gnu99 -Wall -Wextra
 # Optimizations
-CFLAGS += -Os
+CFLAGS += -Os -fshort-enums
 
 # alle .c Dateien aus diesen Ordnern einsammeln
 SRCS = $(wildcard app/*.c bsp/*.c hal/*.c dsp/*.c util/*.c)

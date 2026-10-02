@@ -55,11 +55,17 @@ typedef enum : uint8_t {
 
 typedef enum : uint8_t{
   TIMER_TOP_OCRA,
+  TIMER_TOP_ICR1,
+  TIMER_TOP_0X00FF,
+  TIMER_TOP_0X01FF,
+  TIMER_TOP_0X03FF,
   TIMER_TOP_MAX,
   TIMER_TOP_COUNT
 }timer_top_t;
 
 
 status_t timer_init(timer_id_t);// PRR-Bit löschen, Register auf Ausgangszustand, reservieren
+status_t timer_set_channel(timer_id_t, timer_channel_t,timer_top_t);
+status_t timer_set_mode(timer_id_t,timer_mode_t);
 
 #endif

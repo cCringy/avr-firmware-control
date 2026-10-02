@@ -1,37 +1,58 @@
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "timeQueue.h"
 
-
-#TODO
-#Array Resizing statt capacity
+// TODO
+// Array Resizing statt capacity
 
 struct task{
-    uint16_t      start;
-    uint16_t      period;
-    TaskCallBack  handler;
-    void*         data;
+    tick_t        start;    // Zeitpunkt der nächsten Ausführung
+    tick_t        period;   // 0 = einmaliger Task, >0 = periodisch
+    TaskCallback  handler;  // wird bei Ausführung aufgerufen
+    void*         data;     // Argument für handler (gehört dem Aufrufer)
 };
 
 struct timeq{
-    uint8_t capacity; 
-    task_t* schedule;
-    uint8_t size;
+    uint8_t capacity;       // maximale Anzahl Tasks
+    uint8_t size;           // aktuelle Anzahl Tasks
+    task_t* schedule;       // Min-Heap (Array), sortiert nach start
 };
 
-void swp(task_t* x, task_t* y)
+// ---------------------------------------------------------------
+// Interne Hilfsfunktionen
+// ---------------------------------------------------------------
+
+/**
+ * Overflow-sicherer Zeitvergleich: true, wenn Zeitpunkt a vor b liegt.
+ * Funktioniert auch, wenn der 32-Bit-Tickzähler überläuft, solange
+ * a und b weniger als 2^31 Ticks auseinander liegen.
+ */
+static bool isBefore(tick_t a, tick_t b){
+    return (int32_t)(a - b) < 0;
+}
+
+/**
+ * Vertauscht zwei Task-Zeiger im Heap-Array.
+ */
+static void swp(task_t* x, task_t* y)
 {
     task_t temp = *x;
     *x = *y;
     *y = temp;
 }
 
-void ascend(timeq_t pTimeQ, uint8_t idx) {
+/**
+ * Stellt die Heap-Bedingung nach oben wieder her (sift-up).
+ * Das Element an idx wandert nach oben, solange es früher dran ist
+ * als sein Elternteil. Iterativ, da der Stack auf dem ATmega328P knapp ist.
+ */
+static void ascend(timeq_t pTimeQ, uint8_t idx) {
     while (idx > 0) {
         uint8_t parent = (idx - 1) / 2;
 
-        // Wenn die Startzeit des Elternteils kleiner/gleich ist, sind wir fertig
-        if (pTimeQ->schedule[parent]->start <= pTimeQ->schedule[idx]->start) {
+        // Wenn der Elternteil nicht später dran ist, sind wir fertig
+        if (!isBefore(pTimeQ->schedule[idx]->start, pTimeQ->schedule[parent]->start)) {
             break;
         }
 
@@ -41,157 +62,213 @@ void ascend(timeq_t pTimeQ, uint8_t idx) {
     }
 }
 
-void descend(timeq_t pTimeQ, uint8_t idx) {
+/**
+ * Stellt die Heap-Bedingung nach unten wieder her (sift-down).
+ * Das Element an idx wandert nach unten, solange eines seiner Kinder
+ * früher dran ist. Iterativ, da der Stack auf dem ATmega328P knapp ist.
+ * Indizes sind uint16_t, damit 2*idx+2 bei capacity > 127 nicht überläuft.
+ */
+static void descend(timeq_t pTimeQ, uint8_t idx) {
     while (true) {
-        uint8_t smallest = idx;
-        uint8_t left = 2 * idx + 1;
-        uint8_t right = 2 * idx + 2;
+        uint16_t smallest = idx;
+        uint16_t left     = 2 * (uint16_t)idx + 1;
+        uint16_t right    = 2 * (uint16_t)idx + 2;
 
-        // Prüfen, ob das linke Kind kleiner ist als das aktuelle Element
-        if (left < pTimeQ->size && 
-            pTimeQ->schedule[left]->start < pTimeQ->schedule[smallest]->start) {
+        // Ist das linke Kind früher dran als das aktuelle Element?
+        if (left < pTimeQ->size &&
+            isBefore(pTimeQ->schedule[left]->start, pTimeQ->schedule[smallest]->start)) {
             smallest = left;
         }
 
-        // Prüfen, ob das rechte Kind noch kleiner ist
-        if (right < pTimeQ->size && 
-            pTimeQ->schedule[right]->start < pTimeQ->schedule[smallest]->start) {
+        // Ist das rechte Kind noch früher dran?
+        if (right < pTimeQ->size &&
+            isBefore(pTimeQ->schedule[right]->start, pTimeQ->schedule[smallest]->start)) {
             smallest = right;
         }
 
-        // Wenn das kleinste Element nicht mehr das aktuelle ist -> Tauschen
+        // Wenn das früheste Element nicht das aktuelle ist -> Tauschen
         if (smallest != idx) {
             swp(&pTimeQ->schedule[idx], &pTimeQ->schedule[smallest]);
-            idx = smallest; // Weiter nach unten prüfen
+            idx = (uint8_t)smallest; // Weiter nach unten prüfen
         } else {
             break; // Heap-Bedingung erfüllt
         }
     }
 }
 
-// Keine Rekursion da Stack auf ATmega328p reduziert
+// ---------------------------------------------------------------
+// Time-Queue
+// ---------------------------------------------------------------
 
-// void ascend(timeq_t pTimeQ,uint8_t idx){
-//     if (idx && pTimeQ->schedule[(idx-1)/2]->start > pTimeQ->schedule[idx]->start){
-//         swp(&pTimeQ->schedule[(idx-1)/2],&pTimeQ->schedule[idx]);
-//         ascend(pTimeQ,(idx-1)/2);
-//     }
-// }
-
-// void descend(timeq_t pTimeQ,uint8_t idx){
-//     uint8_t e           = idx;
-//     uint8_t leftChild   = 2 * idx + 1;
-//     uint8_t rightChild  = 2 * idx + 2:
-
-//     if (leftChild < pTimeQ->size && pTimeQ->schedule[leftChild]->start < pTimeQ->schedule[e]->start){
-//         e = leftChild;
-//     }
-//     if (rightChild < pTimeQ->size && pTimeQ->schedule[rightChild]->start < pTimeQ->schedule[e]->start){
-//         e = rightChild;
-//     }
-//     if (e != idx) {
-//         swap(&pTimeQ->schedule[idx], &pTimeQ->schedule[e]);
-//         descend(pTimeQ, e);
-//     }
-// }
-
-
-
+/**
+ * Erzeugt eine leere Time-Queue für höchstens max_tasks Tasks.
+ * Rückgabe: Zeiger auf die Queue, oder NULL bei max_tasks == 0
+ * bzw. wenn kein Speicher mehr frei ist.
+ */
 timeq_t timeq_create(uint8_t max_tasks){
-    timeq_t newTimeQ = (timeq_t) malloc( sizeof( struct timeq ) );
-    if(!newTimeQ) return NULL; // falls Speicher voll
-    newTimeQ->capacity = max_tasks;
-    newTimeQ->schedule = malloc(max_tasks * sizeof(task_t));
+    if (max_tasks == 0) return NULL;
 
-    if (!newTimeQ->schedule) { // falls Speicher nach der Allokation von der Queue voll und kein Platz für array
+    // calloc setzt size auf 0
+    timeq_t newTimeQ = (timeq_t) calloc(1, sizeof(struct timeq));
+    if (!newTimeQ) return NULL; // falls Speicher voll
+
+    newTimeQ->capacity = max_tasks;
+    newTimeQ->schedule = (task_t*) malloc(max_tasks * sizeof(task_t));
+
+    if (!newTimeQ->schedule) { // kein Platz für das Array -> Queue wieder freigeben
         free(newTimeQ);
         return NULL;
     }
     return newTimeQ;
 }
 
+/**
+ * Gibt true zurück, wenn keine Tasks eingeplant sind.
+ */
 bool timeq_isEmpty(timeq_t pTimeQ){
-    return (pTimeQ->size == 0)
+    return (pTimeQ->size == 0);
 }
 
-timeq_scheduleTask(timeq_t pTimeQ, task_t task){
-    if(pTimeQ->size == pTimeQ->capacity){
-        printf("Queue is full");
-        return;
+/**
+ * Plant einen Task ein (Start- und Periodenzeit müssen vorher am Task
+ * gesetzt sein). Die Queue übernimmt den Besitz des Tasks.
+ * Rückgabe: true bei Erfolg, false bei vollem Heap oder task == NULL.
+ */
+bool timeq_scheduleTask(timeq_t pTimeQ, task_t task){
+    if (!task || pTimeQ->size == pTimeQ->capacity){
+        return false;
     }
 
     pTimeQ->schedule[pTimeQ->size] = task;
     ascend(pTimeQ, pTimeQ->size);
     pTimeQ->size++;
+    return true;
 }
 
-void timeq_treatTask(timeq_t pTimeQ){
-    if(!pTimeQ->size){
-        printf("Time-Queue is empty");
-        return -1;
+/**
+ * Führt den Task an der Spitze des Heaps aus (unabhängig von der Zeit).
+ * Periodische Tasks werden um ihre Periode verschoben und bleiben in der
+ * Queue, einmalige Tasks werden entfernt und nach der Ausführung freigegeben.
+ * Rückgabe: false, wenn die Queue leer ist, sonst true.
+ */
+bool timeq_treatTask(timeq_t pTimeQ){
+    if (pTimeQ->size == 0){
+        return false;
     }
-    task_t taskToTreat  = pTimeQ->schedule[0];
-    if(task_isPeriodic(taskToTreat)){
-        taskToTreat->start += taskToTreat->period%0x7FFFFFFF;
-        descend(pTimeQ,0)
-        taskToTreat->handler(taskToTreat->data);
-    }else{
+
+    task_t taskToTreat = pTimeQ->schedule[0];
+
+    if (task_isPeriodic(taskToTreat)){
+        // Nächsten Start berechnen (Überlauf wird durch isBefore abgefangen)
+        taskToTreat->start += taskToTreat->period;
+        descend(pTimeQ, 0);
+        if (taskToTreat->handler) taskToTreat->handler(taskToTreat->data);
+    } else {
+        // Task aus dem Heap nehmen: letztes Element nach vorne, dann absenken
         pTimeQ->schedule[0] = pTimeQ->schedule[--pTimeQ->size];
-        descend(pTimeQ,0);
-        taskToTreat->handler(taskToTreat->data);
-        destroyTask(&taskToTreat);
+        descend(pTimeQ, 0);
+        if (taskToTreat->handler) taskToTreat->handler(taskToTreat->data);
+        task_destroy(&taskToTreat);
     }
+    return true;
 }
 
-timeq_process(timeq_t pTimeQ, uint32_t currentTicks){
-    if(pTimeQ->size > 0 && currentTicks >= pTimeQ->schedule[0]->start){
-        timeq_treatTask();
+/**
+ * Soll regelmäßig (z.B. in der Main-Loop) mit der aktuellen Tickzeit
+ * aufgerufen werden. Führt den ersten Task aus, falls er fällig ist.
+ * Rückgabe: true, wenn ein Task ausgeführt wurde.
+ */
+bool timeq_process(timeq_t pTimeQ, tick_t currentTicks){
+    if (pTimeQ->size > 0 && !isBefore(currentTicks, pTimeQ->schedule[0]->start)){
+        return timeq_treatTask(pTimeQ);
     }
+    return false;
 }
 
-timeq_peek(timeq_t pTimeQ){
-    return task_get_start_time(pTimeQ->schedule[0]->start);
+/**
+ * Liefert die Startzeit des nächsten Tasks in *pStart, ohne ihn zu entfernen.
+ * Rückgabe: false, wenn die Queue leer ist (*pStart bleibt dann unverändert).
+ */
+bool timeq_peek(timeq_t pTimeQ, tick_t* pStart){
+    if (pTimeQ->size == 0 || !pStart){
+        return false;
+    }
+    *pStart = task_get_start_time(pTimeQ->schedule[0]);
+    return true;
 }
 
+/**
+ * Gibt die Queue samt aller noch eingeplanten Tasks frei und setzt
+ * den Zeiger des Aufrufers auf NULL. task->data wird nicht freigegeben.
+ */
+void timeq_delete(timeq_t* pTimeQ){
+    if (!pTimeQ || *pTimeQ == NULL)
+        return;
 
-task_t createTask(TaskCallBack pHandler, void* pData){
-    task_t newTask   = (task_t) calloc( 1 , sizeof ( struct task ) );
+    // Noch eingeplante Tasks gehören der Queue -> freigeben
+    for (uint8_t i = 0; i < (*pTimeQ)->size; i++){
+        task_destroy(&(*pTimeQ)->schedule[i]);
+    }
+    free((*pTimeQ)->schedule);
+    free(*pTimeQ);
+    *pTimeQ = NULL;
+}
+
+// ---------------------------------------------------------------
+// Task
+// ---------------------------------------------------------------
+
+/**
+ * Erzeugt einen neuen Task (start = 0, period = 0, also einmalig).
+ * Rückgabe: Task oder NULL, wenn kein Speicher mehr frei ist.
+ */
+task_t task_create(TaskCallback pHandler, void* pData){
+    task_t newTask = (task_t) calloc(1, sizeof(struct task));
+    if (!newTask) return NULL;
+
     newTask->handler = pHandler;
     newTask->data    = pData;
-
     return newTask;
 }
 
-void task_set_periodic(task_t pTask, uint16_t period){
-    pTask->periodic = isPeriodic;
+/**
+ * Macht den Task periodisch mit der gegebenen Periode in Ticks.
+ * period == 0 macht ihn wieder zum einmaligen Task.
+ */
+void task_set_periodic(task_t pTask, tick_t period){
+    pTask->period = period;
 }
 
-task_t task_isPriodic(task_t pTask){
-   return pTask->period > 0;
+/**
+ * Gibt true zurück, wenn der Task periodisch ist (period > 0).
+ */
+bool task_isPeriodic(task_t pTask){
+    return pTask->period > 0;
 }
 
-void task_set_start_time(task_t pTask,uint16_t start){
-    pTask->start  =  start;
+/**
+ * Setzt den Zeitpunkt der (nächsten) Ausführung.
+ * Nur vor timeq_scheduleTask aufrufen, sonst stimmt der Heap nicht mehr.
+ */
+void task_set_start_time(task_t pTask, tick_t start){
+    pTask->start = start;
 }
 
-task_t task_get_start_time(task_t pTask,uint16_t start){
+/**
+ * Liefert den Zeitpunkt der nächsten Ausführung.
+ */
+tick_t task_get_start_time(task_t pTask){
     return pTask->start;
 }
 
-void destroyTask(task_t* task){
-    if(!task || *task == NULL)
+/**
+ * Gibt einen Task frei und setzt den Zeiger des Aufrufers auf NULL.
+ * task->data bleibt unangetastet, da der Scheduler nicht weiß,
+ * ob es vom Heap, Stack oder aus dem globalen Speicher kommt.
+ */
+void task_destroy(task_t* task){
+    if (!task || *task == NULL)
         return;
-    // Lösche nur Task, welche mit calloc erstellt haben.
-    // task->data bleibt, da der Scheduler nicht weiß, 
-    // ob es vom Heap, Stack oder aus dem globalen Speicher kommt.
     free(*task);
     *task = NULL;
-}
-
-void timeq_delete(timeq_t* pTimeQ){
-    if(!pTimeQ || *pTimeQ == NULL)
-        return;
-    free((*pTimeQ)->schedule);
-    free((*pTimeQ));
-    *pTimeQ = NULL;
 }

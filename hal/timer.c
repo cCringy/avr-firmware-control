@@ -6,10 +6,6 @@
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 #define WGM_RESERVED {TIMER_MODE_COUNT,TIMER_TOP_COUNT}
 
-static const uint8_t  timer02_max_val = 0xFF;
-static const uint16_t timer1_max_val  = 0xFFFF;
-static const uint16_t pre_max_val     = 1024;
-
 static const uint16_t pre_val_01[] = { 1, 8, 64, 256, 1024 };
 static const uint8_t  pre_bits_01[] = {
     (1 << CS10),                 // /1
@@ -35,15 +31,47 @@ typedef struct WaveformMode{
 
 typedef struct TimerDescriptor {
   volatile uint8_t *tccra, *tccrb, *timsk, *tifr;
-  uint8_t         cs_mask;
-  uint16_t        top_max;      // UINT8_MAX or UINT16_MAX
-  const uint16_t *pre_val;
-  const uint8_t  *pre_bits;
-  uint8_t         pre_count;
+  uint8_t           cs_mask;
+  uint16_t          top_max;      // UINT8_MAX or UINT16_MAX
+  const uint16_t   *pre_val;
+  const uint8_t    *pre_bits;
+  uint8_t           pre_count;
+  const wgm_mode_t *timer_mode_table;
+  uint8_t           timer_mode_table_count;
 } timer_desc_t;
 
  // modes for timer0 range from 0-7 
-const wgm_mode_t timer0[] = {
+static const wgm_mode_t timer0[] = {
+  {TIMER_MODE_NORMAL            ,TIMER_TOP_MAX  },
+  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_MAX  },
+  {TIMER_MODE_CTC               ,TIMER_TOP_OCRA },
+  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_MAX  },
+  WGM_RESERVED,
+  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_OCRA },
+  WGM_RESERVED,
+  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_OCRA }
+};
+
+static const wgm_mode_t timer1[] = {
+  {TIMER_MODE_NORMAL                  ,TIMER_TOP_MAX     },
+  {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_0X00FF  },
+  {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_0X01FF  },
+  {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_0X03FF  },
+  {TIMER_MODE_CTC                     ,TIMER_TOP_OCRA    },
+  {TIMER_MODE_FAST_PWM                ,TIMER_TOP_0X00FF  },
+  {TIMER_MODE_FAST_PWM                ,TIMER_TOP_0X01FF  },
+  {TIMER_MODE_FAST_PWM                ,TIMER_TOP_0X03FF  },
+  {TIMER_MODE_PHASE_FREQ_CORRECT_PWM  ,TIMER_TOP_ICR1    },
+  {TIMER_MODE_PHASE_FREQ_CORRECT_PWM  ,TIMER_TOP_OCRA    },
+  {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_ICR1    },
+  {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_OCRA    },
+  {TIMER_MODE_CTC                     ,TIMER_TOP_ICR1    },
+  WGM_RESERVED,
+  {TIMER_MODE_FAST_PWM                ,TIMER_TOP_ICR1    },
+  {TIMER_MODE_FAST_PWM                ,TIMER_TOP_OCRA    }
+};
+
+static const wgm_mode_t timer2[] = {
   {TIMER_MODE_NORMAL            ,TIMER_TOP_MAX  },
   {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_MAX  },
   {TIMER_MODE_CTC               ,TIMER_TOP_OCRA },
@@ -55,21 +83,57 @@ const wgm_mode_t timer0[] = {
 };
 
 static const timer_desc_t timers[HAL_TIMER_COUNT] = {
-  [HAL_TIMER_0] = { &TCCR0A,&TCCR0B,&TIMSK0,&TIFR0, (1<<CS02)|(1<<CS01)|(1<<CS00),
-                    UINT8_MAX,  pre_val_01, pre_bits_01, ARRAY_SIZE(pre_val_01) },
-  [HAL_TIMER_1] = { &TCCR1A,&TCCR1B,&TIMSK1,&TIFR1, (1<<CS12)|(1<<CS11)|(1<<CS10),
-                    UINT16_MAX, pre_val_01, pre_bits_01, ARRAY_SIZE(pre_val_01) },
-  [HAL_TIMER_2] = { &TCCR2A,&TCCR2B,&TIMSK2,&TIFR2, (1<<CS22)|(1<<CS21)|(1<<CS20),
-                    UINT8_MAX,  pre_val_2,  pre_bits_2,  ARRAY_SIZE(pre_val_2) },
+  [HAL_TIMER_0] = { 
+                    &TCCR0A,&TCCR0B,&TIMSK0,&TIFR0, 
+                    (1<<CS02)|(1<<CS01)|(1<<CS00),
+                    UINT8_MAX,  
+                    pre_val_01, 
+                    pre_bits_01, 
+                    ARRAY_SIZE(pre_val_01),
+                    timer0,
+                    ARRAY_SIZE(timer0)
+                  },
+  [HAL_TIMER_1] = {
+                    &TCCR1A,&TCCR1B,&TIMSK1,&TIFR1,
+                    (1<<CS12)|(1<<CS11)|(1<<CS10),
+                    UINT16_MAX,
+                    pre_val_01,
+                    pre_bits_01,
+                    ARRAY_SIZE(pre_val_01),
+                    timer1,
+                    ARRAY_SIZE(timer1)
+                  },
+  [HAL_TIMER_2] = {
+                    &TCCR2A,&TCCR2B,&TIMSK2,&TIFR2, 
+                    (1<<CS22)|(1<<CS21)|(1<<CS20),
+                    UINT8_MAX,
+                    pre_val_2,
+                    pre_bits_2,
+                    ARRAY_SIZE(pre_val_2),
+                    timer2,
+                    ARRAY_SIZE(timer2)
+                  },
 };
 
 status_t timer_init(timer_id_t t){
+  if(HAL_TIMER_COUNT <= t) return STATUS_ERR_PARAM;
   *timers[t].tccrb &= ~timers[t].cs_mask;
-
+  
   return STATUS_OK;
 }
 
-status_t timer_set_mode(timer_id_t t , timer_mode_t mode){
+status_t timer_set_mode(timer_id_t t , timer_mode_t mode,timer_top_t top){
+  if(HAL_TIMER_COUNT <= t || TIMER_MODE_COUNT <= mode || TIMER_TOP_COUNT<=top) return STATUS_ERR_PARAM;
+  uint8_t wgm =  0;
+  const timer_desc_t *  d = &timers[t];
+  for(; wgm<d->timer_mode_table_count;wgm++){
+    if(d->timer_mode_table[wgm].mode == mode){
+      break;
+    }
+  }
+
+  *d->tccra = (*d->tccra & ~0x03) | (wgm & 0x03);
+  *d->tccrb = (*d->tccrb & ~0x18) | ((wgm & 0x0C) << 1);
   return STATUS_OK;
 }
 
@@ -109,9 +173,9 @@ static status_t configure_pre_and_return_top(timer_id_t t,uint16_t ms, uint16_t 
 
   const timer_desc_t *d = &timers[t];
 
-  const uint32_t ticks_per_ms        = F_CPU/1000UL;
-  const uint32_t max_counts = (uint32_t)d->top_max + 1UL;
-  const uint32_t max_ms     = (max_counts * d->pre_val[d->pre_count-1]) / ticks_per_ms;
+  const uint32_t ticks_per_ms = F_CPU/1000UL;
+  const uint32_t max_counts   = (uint32_t)d->top_max + 1UL;
+  const uint32_t max_ms       = (max_counts * d->pre_val[d->pre_count-1]) / ticks_per_ms;
 
   if(ms == 0)     ms = 1;
   if(ms > max_ms) ms = (uint16_t) max_ms;
@@ -121,7 +185,7 @@ static status_t configure_pre_and_return_top(timer_id_t t,uint16_t ms, uint16_t 
 
   for(; i < d->pre_count;i++){
     counts = (ticks_per_ms * ms + d->pre_val[i] / 2) / d->pre_val[i];
-    if(counts >= max_counts) break;
+    if(counts <= max_counts) break;
   }
   if( i == d->pre_count) {i =  d->pre_count-1; counts = max_counts;}
   if(counts == 0) counts = 1;
@@ -130,21 +194,6 @@ static status_t configure_pre_and_return_top(timer_id_t t,uint16_t ms, uint16_t 
   *out_top = (uint16_t)(counts-1);
 
   return STATUS_OK;
-}
-
-void timer_init_timer1_pwm(){
-    cli();
-    TCCR1A = 0; // Lösche potentielle Voreinstellungen (e.g. PWM etc)
-    TCCR1B = 0; // Lösche potentielle Voreinstellungen (e.g. PWM etc)
-    
-    TCCR1A |= (1<<WGM11) | (1<<WGM10);
-    TCCR1B |= (1<<WGM12) | (1<<CS11) | (1<<CS10);//  FastPWM10bit;Prescaler, da LED 244 hz gut also pre=64
-    
-    // PWM Output auf OC1A aktivieren (PIN PB1 bei ATmega328)
-    TCCR1A |= (1<<COM1A1); // Non-inverting mode
-
-    OCR1A = 1023;
-    sei();
 }
 
 uint16_t timer_fetch_comp(){
