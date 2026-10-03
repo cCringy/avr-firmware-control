@@ -15,10 +15,13 @@ UART_FRAMESIZE ?= 8
 
 CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -DUART_FRAMESIZE=$(UART_FRAMESIZE)
 CFLAGS += -Iapp -Ibsp -Ihal -Idsp -Iutil
+CFLAGS += -ffunction-sections -fdata-sections
 # Warnings
-CFLAGS += -std=gnu99 -Wall -Wextra
+CFLAGS += -Wall -Wextra -Wconversion -Wshadow
 # Optimizations
-CFLAGS += -Os -fshort-enums
+CFLAGS += -std=gnu23 -Os -fshort-enums
+# --gc-sections removes unused functions. Reduce load
+LDFLAGS = -mmcu=atmega328p -Wl,--gc-sections
 
 # alle .c Dateien aus diesen Ordnern einsammeln
 SRCS = $(wildcard app/*.c bsp/*.c hal/*.c dsp/*.c util/*.c)

@@ -28,19 +28,19 @@ timer 2 modes:
 - phase correct pwm
 */
 
-typedef enum : uint8_t { 
+typedef enum:uint8_t{ 
   HAL_TIMER_0, 
   HAL_TIMER_1, 
   HAL_TIMER_2,
   HAL_TIMER_COUNT
 } timer_id_t;
 
-typedef enum : uint8_t { 
+typedef enum:uint8_t{ 
   TIMER_CH_A,
   TIMER_CH_B
 } timer_channel_t;
 
-typedef enum : uint8_t {
+typedef enum:uint8_t{
     TIMER_MODE_NORMAL,
     TIMER_MODE_CTC,
     TIMER_MODE_FAST_PWM,
@@ -49,7 +49,7 @@ typedef enum : uint8_t {
     TIMER_MODE_COUNT
 } timer_mode_t;
 
-typedef enum : uint8_t{
+typedef enum:uint8_t{
   TIMER_TOP_OCRA,
   TIMER_TOP_ICR1,
   TIMER_TOP_0X00FF,
