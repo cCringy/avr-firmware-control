@@ -222,7 +222,7 @@ status_t timer_start(timer_id_t t, uint16_t prescaler){
 
   return STATUS_ERR_PARAM;
 }
-status_t timer_stop(t){
+status_t timer_stop(timer_id_t t){
   if(t >= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
 
   timer_desc_t * d = &timers[t];
@@ -232,5 +232,5 @@ status_t timer_stop(t){
 }
 
 ISR(TIMER1_COMPA_vect){
-
+  timer_callback();
 }
