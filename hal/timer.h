@@ -62,6 +62,8 @@ typedef enum : uint8_t{
 
 status_t timer_init(timer_id_t);// PRR-Bit löschen, Register auf Ausgangszustand, reservieren
 status_t timer_deinit(timer_id_t);
+status_t timer_start(timer_id_t ,uint16_t prescaler);
+status_t timer_stop(t);
 status_t timer_set_channel(timer_id_t, timer_channel_t);
 status_t timer_set_mode(timer_id_t,timer_mode_t,timer_top_t);
 

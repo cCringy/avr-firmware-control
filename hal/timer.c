@@ -7,6 +7,8 @@
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 #define WGM_RESERVED {TIMER_MODE_COUNT,TIMER_TOP_COUNT}
 
+static void (*timer_callback)(void);
+
 // Uses CS1x for both Timer1 and Timer2, this works because the bit positions are the same
 static const uint16_t pre_val_01[] = { 1, 8, 64, 256, 1024 };
 static const uint8_t  pre_bits_01[] = {
@@ -84,7 +86,7 @@ static const wgm_mode_t timer2[] PROGMEM = {
   {TIMER_MODE_FAST_PWM          ,TIMER_TOP_OCRA    }
 };
 
-static const timer_desc_t timers[HAL_TIMER_COUNT] PROGMEM= {
+static const timer_desc_t timers[HAL_TIMER_COUNT] PROGMEM = {
   [HAL_TIMER_0] = { 
                     &TCCR0A,&TCCR0B,&TIMSK0,&TIFR0, 
                     (1<<CS02)|(1<<CS01)|(1<<CS00),
@@ -199,6 +201,32 @@ static status_t configure_pre_and_return_top(timer_id_t t,uint16_t ms, uint16_t 
 
   *d->tccrb = (*d->tccrb & (uint8_t)~d->cs_mask) | d->pre_bits[i];
   *out_top = (uint16_t)(counts-1);
+
+  return STATUS_OK;
+}
+
+status_t timer_start(timer_id_t t, uint16_t prescaler){
+  if(t >= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
+  timer_desc_t * d = &timers[t];
+
+  if(d->pre_val[d->pre_count] < prescaler){
+    return STATUS_ERR_PARAM;
+  }
+
+  for(int i = 0 ; i < d->pre_count ; i++){
+    if(d->pre_val[i] == prescaler){
+      *d->tccrb &= d->pre_bits[i];
+      return STATUS_OK;
+    }
+  }
+
+  return STATUS_ERR_PARAM;
+}
+status_t timer_stop(t){
+  if(t >= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
+
+  timer_desc_t * d = &timers[t];
+  *d->tccrb &= (uint8_t) ~d->cs_mask;
 
   return STATUS_OK;
 }
