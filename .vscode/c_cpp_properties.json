@@ -13,9 +13,10 @@
             "defines": [
                 "__AVR_ATmega328P__",
                 "F_CPU=16000000UL",
-                "UART_FRAMESIZE=8"
+                "UART_FRAMESIZE=8",
+                "__flash="
             ],
-            "cStandard": "gnu99",
+            "cStandard": "gnu23",
             "intelliSenseMode": "gcc-x64"
         }
     ],

@@ -4,14 +4,56 @@
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 
+#if defined(__AVR__) && defined(__FLASH)
+  #define HAL_FLASH __flash
+#else
+  #define HAL_FLASH
+#endif
+
+#ifndef F_CPU
+#error "F_CPU must be defined by the build system (-DF_CPU=...)"
+#endif
+
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 #define WGM_RESERVED {TIMER_MODE_COUNT,TIMER_TOP_COUNT}
 
-static void (*timer_callback)(void);
+//-----------------STRUCTS---------------------
 
-// Uses CS1x for both Timer1 and Timer2, this works because the bit positions are the same
-static const uint16_t pre_val_01[] = { 1, 8, 64, 256, 1024 };
-static const uint8_t  pre_bits_01[] = {
+typedef struct TimerDescriptor {
+  volatile uint8_t           *tccra, *tccrb, *timsk, *tifr;
+  uint8_t                     cs_mask;
+  uint16_t                    top_max;      // UINT8_MAX or UINT16_MAX
+  const HAL_FLASH uint16_t   *pre_val;
+  const HAL_FLASH uint8_t    *pre_bits;
+  uint8_t                     pre_count;
+  const HAL_FLASH wgm_mode_t *timer_mode_table;
+  uint8_t                     timer_mode_table_count;
+} timer_desc_t;
+
+typedef struct {
+  bool    in_use;
+  uint8_t wgm;          // aktuell gesetzter WGM-Index
+  uint8_t pre_idx;      // zuletzt gewählter Prescaler (für Resume)
+} timer_state_t;
+
+typedef struct WaveformMode{
+  timer_mode_t mode;
+  timer_top_t  top_value;
+}wgm_mode_t;
+
+static_assert(sizeof(wgm_mode_t) == 2, "enum : uint8_t needs to work");
+
+//-----------------STRUCTS-END---------------------
+
+////---------------FILE GLOBALS---------------------
+static timer_state_t state[HAL_TIMER_COUNT];
+
+void (* volatile cb)(void);
+
+//-----------------LOOKUP-TABLES---------------------
+// Uses CS1x for both Timer0 and Timer2, this works because the bit positions are the same
+static const HAL_FLASH uint16_t pre_val_01[]  = { 1, 8, 64, 256, 1024 };
+static const HAL_FLASH uint8_t  pre_bits_01[] = {
     (1 << CS10),                 // /1
     (1 << CS11),                 // /8
     (1 << CS11) | (1 << CS10),   // /64
@@ -19,8 +61,10 @@ static const uint8_t  pre_bits_01[] = {
     (1 << CS12) | (1 << CS10),   // /1024
 };
 
-static const uint16_t pre_val_2[]  PROGMEM = { 1, 8, 32, 64, 128, 256, 1024 };
-static const uint8_t  pre_bits_2[] PROGMEM= { (1<<CS20), (1<<CS21),
+static_assert(ARRAY_SIZE(pre_val_01) == ARRAY_SIZE(pre_bits_01));
+
+static const HAL_FLASH uint16_t pre_val_2[]   = { 1, 8, 32, 64, 128, 256, 1024 };
+static const HAL_FLASH uint8_t  pre_bits_2[]  = { (1<<CS20), (1<<CS21),
                                               (1<<CS21)|(1<<CS20),
                                               (1<<CS22),
                                               (1<<CS22)|(1<<CS20),
@@ -28,24 +72,11 @@ static const uint8_t  pre_bits_2[] PROGMEM= { (1<<CS20), (1<<CS21),
                                               (1<<CS22)|(1<<CS21)|(1<<CS20)
                                             };
 
-typedef struct WaveformMode{
-  timer_mode_t mode;
-  timer_top_t  top_value;
-}wgm_mode_t;
+static_assert(ARRAY_SIZE(pre_val_2) == ARRAY_SIZE(pre_bits_2));
 
-typedef struct TimerDescriptor {
-  volatile uint8_t *tccra, *tccrb, *timsk, *tifr;
-  uint8_t           cs_mask;
-  uint16_t          top_max;      // UINT8_MAX or UINT16_MAX
-  const uint16_t   *pre_val;
-  const uint8_t    *pre_bits;
-  uint8_t           pre_count;
-  const wgm_mode_t *timer_mode_table;
-  uint8_t           timer_mode_table_count;
-} timer_desc_t;
 
  // modes for timer0 range from 0-7 
-static const wgm_mode_t timer0[] PROGMEM = {
+static const HAL_FLASH wgm_mode_t timer0[] = {
   {TIMER_MODE_NORMAL            ,TIMER_TOP_MAX     },
   {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_0X00FF  },
   {TIMER_MODE_CTC               ,TIMER_TOP_OCRA    },
@@ -55,8 +86,8 @@ static const wgm_mode_t timer0[] PROGMEM = {
   WGM_RESERVED,
   {TIMER_MODE_FAST_PWM          ,TIMER_TOP_OCRA    }
 };
-
-static const wgm_mode_t timer1[] PROGMEM = {
+static_assert(ARRAY_SIZE(timer0)==8);
+static const HAL_FLASH wgm_mode_t timer1[] = {
   {TIMER_MODE_NORMAL                  ,TIMER_TOP_MAX     },
   {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_0X00FF  },
   {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_0X01FF  },
@@ -74,8 +105,8 @@ static const wgm_mode_t timer1[] PROGMEM = {
   {TIMER_MODE_FAST_PWM                ,TIMER_TOP_ICR1    },
   {TIMER_MODE_FAST_PWM                ,TIMER_TOP_OCRA    }
 };
-
-static const wgm_mode_t timer2[] PROGMEM = {
+static_assert(ARRAY_SIZE(timer1)==16);
+static const HAL_FLASH wgm_mode_t timer2[] = {
   {TIMER_MODE_NORMAL            ,TIMER_TOP_MAX     },
   {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_0X00FF  },
   {TIMER_MODE_CTC               ,TIMER_TOP_OCRA    },
@@ -85,8 +116,9 @@ static const wgm_mode_t timer2[] PROGMEM = {
   WGM_RESERVED,
   {TIMER_MODE_FAST_PWM          ,TIMER_TOP_OCRA    }
 };
+static_assert(ARRAY_SIZE(timer2)==8);
 
-static const timer_desc_t timers[HAL_TIMER_COUNT] PROGMEM = {
+static const HAL_FLASH timer_desc_t timers[HAL_TIMER_COUNT] = {
   [HAL_TIMER_0] = { 
                     &TCCR0A,&TCCR0B,&TIMSK0,&TIFR0, 
                     (1<<CS02)|(1<<CS01)|(1<<CS00),
@@ -119,6 +151,9 @@ static const timer_desc_t timers[HAL_TIMER_COUNT] PROGMEM = {
                   },
 };
 
+static_assert(ARRAY_SIZE(timers)==3);
+
+//-------------LOOKUP-TABLES-END--------------------
 status_t timer_init(timer_id_t t){
   if(HAL_TIMER_COUNT <= t) return STATUS_ERR_PARAM;
   *timers[t].tccrb &= ~timers[t].cs_mask;
@@ -180,7 +215,7 @@ status_t timer_set_mode(timer_id_t t , timer_mode_t mode,timer_top_t top){
 static status_t configure_pre_and_return_top(timer_id_t t,uint16_t ms, uint16_t * out_top){
   if(t>= HAL_TIMER_COUNT || !out_top){return STATUS_ERR_PARAM;}
 
-  const timer_desc_t *d = &timers[t];
+  const HAL_FLASH timer_desc_t *d = &timers[t];
 
   const uint32_t ticks_per_ms = F_CPU/1000UL;
   const uint32_t max_counts   = (uint32_t)d->top_max + 1UL;
@@ -207,15 +242,11 @@ static status_t configure_pre_and_return_top(timer_id_t t,uint16_t ms, uint16_t 
 
 status_t timer_start(timer_id_t t, uint16_t prescaler){
   if(t >= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
-  timer_desc_t * d = &timers[t];
+  const HAL_FLASH timer_desc_t * d = &timers[t];
 
-  if(d->pre_val[d->pre_count] < prescaler){
-    return STATUS_ERR_PARAM;
-  }
-
-  for(int i = 0 ; i < d->pre_count ; i++){
+  for(uint8_t i = 0 ; i < d->pre_count ; i++){
     if(d->pre_val[i] == prescaler){
-      *d->tccrb &= d->pre_bits[i];
+      *d->tccrb = (uint8_t)((*d->tccrb & (uint8_t)~d->cs_mask) | d->pre_bits[i]);
       return STATUS_OK;
     }
   }
@@ -225,12 +256,14 @@ status_t timer_start(timer_id_t t, uint16_t prescaler){
 status_t timer_stop(timer_id_t t){
   if(t >= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
 
-  timer_desc_t * d = &timers[t];
+  const HAL_FLASH timer_desc_t * d = &timers[t];
   *d->tccrb &= (uint8_t) ~d->cs_mask;
 
   return STATUS_OK;
 }
 
 ISR(TIMER1_COMPA_vect){
-  timer_callback();
+  if(cb != nullptr){
+    cb();
+  }
 }

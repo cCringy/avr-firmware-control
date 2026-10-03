@@ -52,7 +52,7 @@ void ADC_enable_interrupt(void){
 
 inline void ADC_disable_interrupt(void)
 {
-    ADCSRA &= ~(1 << ADIE);
+    ADCSRA &=(uint8_t) ~(1 << ADIE);
 }
 
 void ADC_set_callback(void (func)(uint16_t)){

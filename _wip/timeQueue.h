@@ -2,7 +2,6 @@
 #define TIMEQUEUE_H_
  
 #include <stdint.h>
-#include <stdbool.h>
  
 // ADT Pattern
 typedef struct timeq timeq;    // timeq instance representation (opaque record)
