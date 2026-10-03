@@ -6,10 +6,6 @@
 #include <stdbool.h>
 #include "status.h"
 
-#ifndef F_CPU
-#define F_CPU 16000000UL // 16 MHz
-#endif
-
 // Clock Sources
 
 // timer0 modes : normal , ctc , fast pwm, phase correct pwm
@@ -65,7 +61,8 @@ typedef enum : uint8_t{
 
 
 status_t timer_init(timer_id_t);// PRR-Bit löschen, Register auf Ausgangszustand, reservieren
-status_t timer_set_channel(timer_id_t, timer_channel_t,timer_top_t);
-status_t timer_set_mode(timer_id_t,timer_mode_t);
+status_t timer_deinit(timer_id_t);
+status_t timer_set_channel(timer_id_t, timer_channel_t);
+status_t timer_set_mode(timer_id_t,timer_mode_t,timer_top_t);
 
 #endif

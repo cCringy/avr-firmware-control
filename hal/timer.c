@@ -1,11 +1,13 @@
 #include "timer.h"
 #include <stdint.h>
 #include <avr/io.h>
+#include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 #define WGM_RESERVED {TIMER_MODE_COUNT,TIMER_TOP_COUNT}
 
+// Uses CS1x for both Timer1 and Timer2, this works because the bit positions are the same
 static const uint16_t pre_val_01[] = { 1, 8, 64, 256, 1024 };
 static const uint8_t  pre_bits_01[] = {
     (1 << CS10),                 // /1
@@ -15,14 +17,14 @@ static const uint8_t  pre_bits_01[] = {
     (1 << CS12) | (1 << CS10),   // /1024
 };
 
-static const uint16_t pre_val_2[]  = { 1, 8, 32, 64, 128, 256, 1024 };
-static const uint8_t  pre_bits_2[] = { (1<<CS20), (1<<CS21),
-                                       (1<<CS21)|(1<<CS20),
-                                       (1<<CS22),
-                                       (1<<CS22)|(1<<CS20),
-                                       (1<<CS22)|(1<<CS21), 
-                                       (1<<CS22)|(1<<CS21)|(1<<CS20)
-                                      };
+static const uint16_t pre_val_2[]  PROGMEM = { 1, 8, 32, 64, 128, 256, 1024 };
+static const uint8_t  pre_bits_2[] PROGMEM= { (1<<CS20), (1<<CS21),
+                                              (1<<CS21)|(1<<CS20),
+                                              (1<<CS22),
+                                              (1<<CS22)|(1<<CS20),
+                                              (1<<CS22)|(1<<CS21), 
+                                              (1<<CS22)|(1<<CS21)|(1<<CS20)
+                                            };
 
 typedef struct WaveformMode{
   timer_mode_t mode;
@@ -41,18 +43,18 @@ typedef struct TimerDescriptor {
 } timer_desc_t;
 
  // modes for timer0 range from 0-7 
-static const wgm_mode_t timer0[] = {
-  {TIMER_MODE_NORMAL            ,TIMER_TOP_MAX  },
-  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_MAX  },
-  {TIMER_MODE_CTC               ,TIMER_TOP_OCRA },
-  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_MAX  },
+static const wgm_mode_t timer0[] PROGMEM = {
+  {TIMER_MODE_NORMAL            ,TIMER_TOP_MAX     },
+  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_0X00FF  },
+  {TIMER_MODE_CTC               ,TIMER_TOP_OCRA    },
+  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_0X00FF  },
   WGM_RESERVED,
-  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_OCRA },
+  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_OCRA    },
   WGM_RESERVED,
-  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_OCRA }
+  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_OCRA    }
 };
 
-static const wgm_mode_t timer1[] = {
+static const wgm_mode_t timer1[] PROGMEM = {
   {TIMER_MODE_NORMAL                  ,TIMER_TOP_MAX     },
   {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_0X00FF  },
   {TIMER_MODE_PHASE_CORRECT_PWM       ,TIMER_TOP_0X01FF  },
@@ -71,18 +73,18 @@ static const wgm_mode_t timer1[] = {
   {TIMER_MODE_FAST_PWM                ,TIMER_TOP_OCRA    }
 };
 
-static const wgm_mode_t timer2[] = {
-  {TIMER_MODE_NORMAL            ,TIMER_TOP_MAX  },
-  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_MAX  },
-  {TIMER_MODE_CTC               ,TIMER_TOP_OCRA },
-  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_MAX  },
+static const wgm_mode_t timer2[] PROGMEM = {
+  {TIMER_MODE_NORMAL            ,TIMER_TOP_MAX     },
+  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_0X00FF  },
+  {TIMER_MODE_CTC               ,TIMER_TOP_OCRA    },
+  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_0X00FF  },
   WGM_RESERVED,
-  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_OCRA },
+  {TIMER_MODE_PHASE_CORRECT_PWM ,TIMER_TOP_OCRA    },
   WGM_RESERVED,
-  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_OCRA }
+  {TIMER_MODE_FAST_PWM          ,TIMER_TOP_OCRA    }
 };
 
-static const timer_desc_t timers[HAL_TIMER_COUNT] = {
+static const timer_desc_t timers[HAL_TIMER_COUNT] PROGMEM= {
   [HAL_TIMER_0] = { 
                     &TCCR0A,&TCCR0B,&TIMSK0,&TIFR0, 
                     (1<<CS02)|(1<<CS01)|(1<<CS00),
@@ -122,21 +124,26 @@ status_t timer_init(timer_id_t t){
   return STATUS_OK;
 }
 
+static status_t write_wgm(const timer_desc_t * d,uint8_t wgm){
+  if(wgm>= d->timer_mode_table_count) return STATUS_ERR_PARAM;
+
+  *d->tccra = (*d->tccra & (uint8_t)~0x03) | (wgm & (uint8_t)0x03);
+  *d->tccrb = (*d->tccrb & (uint8_t)~0x18) | ((wgm & (uint8_t)0x0C) << 1);
+  return STATUS_OK;
+}
+
 status_t timer_set_mode(timer_id_t t , timer_mode_t mode,timer_top_t top){
   if(HAL_TIMER_COUNT <= t || TIMER_MODE_COUNT <= mode || TIMER_TOP_COUNT<=top) return STATUS_ERR_PARAM;
   uint8_t wgm =  0;
   const timer_desc_t *  d = &timers[t];
   for(; wgm<d->timer_mode_table_count;wgm++){
-    if(d->timer_mode_table[wgm].mode == mode){
-      break;
+    if(d->timer_mode_table[wgm].mode == mode &&d->timer_mode_table[wgm].top_value == top){
+      return write_wgm(d,wgm);
     }
   }
 
-  *d->tccra = (*d->tccra & ~0x03) | (wgm & 0x03);
-  *d->tccrb = (*d->tccrb & ~0x18) | ((wgm & 0x0C) << 1);
-  return STATUS_OK;
+  return  STATUS_ERR_PARAM;
 }
-
 /**
  * Picks the smallest prescaler for which the requested period fits into the
  * timer's counter, writes the CS bits (this starts the timer) and returns TOP.
@@ -196,15 +203,6 @@ static status_t configure_pre_and_return_top(timer_id_t t,uint16_t ms, uint16_t 
   return STATUS_OK;
 }
 
-uint16_t timer_fetch_comp(){
-  return 0;
-}
-/*
-void setTopValue(uint16_t top){
-    OCR1AL = top & 0xFF;
-    OCR1AH = top >> 8;
-}
-*/
 ISR(TIMER1_COMPA_vect){
 
 }
