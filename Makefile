@@ -19,9 +19,12 @@ CFLAGS += -ffunction-sections -fdata-sections
 # Warnings
 CFLAGS += -Wall -Wextra -Wconversion -Wshadow
 # Optimizations
-CFLAGS += -std=gnu23 -Os -fshort-enums
+CFLAGS += -std=gnu23 -Os
+CFLAGS += -MMD -MP
 # --gc-sections removes unused functions. Reduce load
-LDFLAGS = -mmcu=atmega328p -Wl,--gc-sections
+LDFLAGS = -mmcu=$(MCU) -Wl,--gc-sections
+
+.DEFAULT_GOAL := all
 
 # alle .c Dateien aus diesen Ordnern einsammeln
 SRCS = $(wildcard app/*.c bsp/*.c hal/*.c dsp/*.c util/*.c)
@@ -32,13 +35,15 @@ $(BUILD_DIR)/%.o: %.c
 	mkdir -p $(dir $@) && $(CC) $(CFLAGS) -c $< -o $@
 
 main.elf: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -lm -o main.elf
+	$(CC) $(LDFLAGS) $(OBJS) -lm -o $@
 
 main.hex: main.elf
 	$(OBJCOPY) -O ihex -R .eeprom main.elf main.hex
 
 flash: main.hex
-	$(AVRDUDE) -c arduino -p $(MCU) $(PROGRAMMER_ARGS) -D -V -U flash:w:$<
+	$(AVRDUDE) -c arduino -p $(MCU) $(PROGRAMMER_ARGS) -D -U flash:w:$<
+
+-include $(OBJS:.o=.d)
 
 .PHONY: clean all flash
 

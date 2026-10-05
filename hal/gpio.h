@@ -2,7 +2,7 @@
 #define GPIO_H_
 
 #include <avr/io.h>
-#include <inttypes.h>
+#include <stdint.h>
 #include "status.h"
 
 #define HIGH 0x1
