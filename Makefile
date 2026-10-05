@@ -4,7 +4,6 @@ F_CPU = 16000000UL
 PROGRAMMER_ARGS = -P COM9
 BUILD_DIR = build
 
-# Arduino IDE bringt avr-gcc/avrdude schon mit, sie liegen nur nicht im PATH
 GCC_DIR = /d/avr-gcc/bin
 
 CC = "$(GCC_DIR)/avr-gcc.exe"

@@ -1,6 +1,7 @@
 #include "status.h"
 #include "timer.h"
 #include "power_intern.h"
+#include "gpio.h"
 #include <stdint.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -59,7 +60,7 @@ typedef struct TimerDescriptor {
   const HAL_FLASH wgm_mode_t *timer_mode_table;
   uint8_t                     timer_mode_table_count;
 
-  // später: gpio_pin_t oc_pin[2];
+  gpio_id_t oc_pin[2];
 } timer_desc_t;
 
 typedef struct {
@@ -162,6 +163,10 @@ static const HAL_FLASH timer_desc_t timers[HAL_TIMER_COUNT] = {
 
     .timer_mode_table       = timer0,
     .timer_mode_table_count = ARRAY_SIZE(timer0),
+    .oc_pin = {
+      [TIMER_CH_A] = {GPIO_PORT_D,GPIO_PIN_Px6},
+      [TIMER_CH_B] = {GPIO_PORT_D,GPIO_PIN_Px5},
+    },
   },
 
   [HAL_TIMER_1] = {
@@ -180,6 +185,10 @@ static const HAL_FLASH timer_desc_t timers[HAL_TIMER_COUNT] = {
 
     .timer_mode_table       = timer1,
     .timer_mode_table_count = ARRAY_SIZE(timer1),
+    .oc_pin = {
+      [TIMER_CH_A] = {GPIO_PORT_B,GPIO_PIN_Px1},
+      [TIMER_CH_B] = {GPIO_PORT_B,GPIO_PIN_Px2},
+    },
   },
 
   [HAL_TIMER_2] = {
@@ -198,6 +207,10 @@ static const HAL_FLASH timer_desc_t timers[HAL_TIMER_COUNT] = {
 
     .timer_mode_table       = timer2,
     .timer_mode_table_count = ARRAY_SIZE(timer2),
+    .oc_pin = {
+      [TIMER_CH_A] = {GPIO_PORT_B,GPIO_PIN_Px3},
+      [TIMER_CH_B] = {GPIO_PORT_D,GPIO_PIN_Px3},
+    },
   },
 };
 
@@ -255,10 +268,9 @@ status_t timer_init(timer_id_t t){
   return STATUS_OK;
 }
 
-static status_t write_wgm(const HAL_FLASH timer_desc_t * d,uint8_t wgm){
-  *d->tccra = (uint8_t)(*d->tccra & (uint8_t)~0x03) | (wgm & (uint8_t)0x03);
-  *d->tccrb = (uint8_t)(*d->tccrb & (uint8_t)~0x18) | ((wgm & (uint8_t)0x0C) << 1);
-  return STATUS_OK;
+static void write_wgm(const HAL_FLASH timer_desc_t * d,uint8_t wgm){
+  *d->tccra = (uint8_t)(*d->tccra & (uint8_t)~0x03) | (wgm & 0x03);
+  *d->tccrb = (uint8_t)(*d->tccrb & (uint8_t)~0x18) | ((wgm & 0x0C) << 1);
 }
 
 status_t timer_set_mode(timer_id_t t , timer_mode_t mode,timer_top_t top){
@@ -266,16 +278,16 @@ status_t timer_set_mode(timer_id_t t , timer_mode_t mode,timer_top_t top){
   if(stat != STATUS_OK) return stat;
   if(TIMER_MODE_COUNT <= mode || TIMER_TOP_COUNT<=top) return STATUS_ERR_PARAM;
   uint8_t wgm =  0;
-  const timer_desc_t HAL_FLASH *  d = &timers[t];
+  const HAL_FLASH timer_desc_t *  d = &timers[t];
   for(; wgm<d->timer_mode_table_count;wgm++){
     if(d->timer_mode_table[wgm].mode == mode &&d->timer_mode_table[wgm].top_value == top){
-      status_t s = write_wgm(d,wgm);
-      if(s==STATUS_OK) state[t].wgm=wgm;
-      return s;
+      write_wgm(d,wgm);
+      state[t].wgm=wgm;
+      return STATUS_OK;
     }
   }
 
-  return  STATUS_ERR_PARAM;
+  return  STATUS_ERR_UNSUPPORTED;
 }
 /**
  * Picks the smallest prescaler for which the requested period fits into the
@@ -312,7 +324,7 @@ static status_t timer_set_frequency(timer_id_t t,uint16_t ms, uint16_t * out_top
   status_t stat = check_ready(t);
   if(stat != STATUS_OK) return stat;
 
-  if(t>= HAL_TIMER_COUNT || !out_top){return STATUS_ERR_PARAM;}
+  if(!out_top){return STATUS_ERR_PARAM;}
 
   const HAL_FLASH timer_desc_t *d = &timers[t];
 
@@ -333,7 +345,7 @@ static status_t timer_set_frequency(timer_id_t t,uint16_t ms, uint16_t * out_top
   if( i == d->pre_count) {i =  d->pre_count-1; counts = max_counts;}
   if(counts == 0) counts = 1;
 
-  *d->tccrb = (*d->tccrb & (uint8_t)~d->cs_mask) | d->pre_bits[i];
+  *d->tccrb = (uint8_t)(*d->tccrb & (uint8_t)~d->cs_mask) | d->pre_bits[i];
   *out_top = (uint16_t)(counts-1);
 
   return STATUS_OK;

@@ -1,6 +1,6 @@
 // hal/power_priv.h – nur für HAL-Treiber, nie aus app/ inkludieren
-#ifndef POWER_PRIV_H
-#define POWER_PRIV_H
+#ifndef POWER_INTERN_H
+#define POWER_INTERN_H
 
 #include <avr/io.h>
 #include <util/atomic.h>
