@@ -59,8 +59,7 @@ set_stop_bits(uint8_t two_stop_bits){
   UCSR0C |= ((two_stop_bits & 1)<<USBS0);
 }
 
-void
-set_parity_mode(parity_t * parity){
+void set_parity_mode(parity_t * parity){
   // clear previous and set new parity mode
   UCSR0C &= ~((1<<UPM01) | (1<<UPM00));
   UCSR0C |= (((((*parity) >> 1) & 1) << UPM01) | (((*parity)  & 1) << UPM00));

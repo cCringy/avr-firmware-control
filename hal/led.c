@@ -3,11 +3,10 @@
 static gpio_port_t led_port;
 static gpio_pin_t led_pin;
 
-status_t LED_init(gpio_port_t port, gpio_pin_t pin)
-{
-  led_port = port;
-  led_pin = pin;
-  return GPIO_set_output(led_port, led_pin);
+status_t LED_init(gpio_id_t id){
+  led_port = id.port;
+  led_pin  = id.pin ;
+  return GPIO_set_output(id);
 }
 status_t LED_on(void)
 {

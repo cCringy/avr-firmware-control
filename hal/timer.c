@@ -36,7 +36,7 @@ typedef struct TimerDescriptor {
   // Control / Interrupt
   volatile uint8_t           *tccra;
   volatile uint8_t           *tccrb;
-  volatile uint8_t           *focr;     // FOCnA (Bit 7) / FOCnB (Bit 6): T0/T2 TCCRnB, T1 TCCR1C
+  volatile uint8_t           *focr; // FOCnA (Bit 7) / FOCnB (Bit 6): T0/T2 TCCRnB, T1 TCCR1C
   volatile uint8_t           *timsk;
   volatile uint8_t           *tifr;
 
@@ -245,6 +245,11 @@ static uint16_t reg_read(const HAL_FLASH timer_desc_t *d,volatile uint8_t *reg){
   }
   return *reg;
 }
+
+static bool timer_is_in_use(t){
+  return state[t].in_use;
+}
+
 status_t timer_init(timer_id_t t){
   
   if(HAL_TIMER_COUNT <= t) return STATUS_ERR_PARAM;
@@ -264,6 +269,29 @@ status_t timer_init(timer_id_t t){
   *d->tifr  = 0xFF;
   
   state[t] = (timer_state_t){ .in_use = true };
+
+  return STATUS_OK;
+}
+
+status_t timer_deinit(timer_id_t t){
+  if(t>= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
+  if(t>=!state[t].in_use) return STATUS_ERR_STATE;
+
+  const HAL_FLASH timer_desc_t *d = &timers[t];
+
+  power_enable(d->prr_mask); // if supended, so registers can be written
+
+  *d->tccrb = 0;               // Clock stop, WGMn2/WGM13 = 0
+  *d->timsk = 0;               // No Interrupts
+  *d->tccra = 0;               // COM-Bits, WGMn1:0
+  *d->focr  = 0;
+  *d->tifr  = 0xFF;
+
+  cb[t][i] = nullptr; // TODO
+
+  power_enable(d->prr_mask);
+
+  state[t] = (timer_state_t){0};
 
   return STATUS_OK;
 }
@@ -373,6 +401,34 @@ status_t timer_stop(timer_id_t t){
 
   const HAL_FLASH timer_desc_t * d = &timers[t];
   *d->tccrb &= (uint8_t) ~d->cs_mask;
+
+  return STATUS_OK;
+}
+
+status_t timer_suspend(timer_id_t t){
+  if(t>=HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
+  if(!state[t].in_use) return STATUS_ERR_STATE;
+  if (state[t].suspended)   return STATUS_OK;
+
+  const HAL_FLASH timer_desc_t * d = &timers[t];
+
+  if((d->caps & TIMER_CAP_ASYNC) && ( ASSR & _BV(AS2))) return STATUS_ERR_STATE;
+  
+  power_disable(d->prr_mask);
+  state[t].suspended = true;
+  return STATUS_OK;
+}
+
+status_t timer_resume(timer_id_t t){
+  if(t>=HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
+  if(!state[t].in_use) return STATUS_ERR_STATE;
+  if (!state[t].suspended) return STATUS_OK;
+
+  const HAL_FLASH timer_desc_t * d = &timers[t];
+  // Timer state Frozen so no additional regs need to be written
+  power_enable(d->prr_mask);
+
+  state[t].suspended = false;
 
   return STATUS_OK;
 }
