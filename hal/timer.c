@@ -348,7 +348,7 @@ status_t timer_set_mode(timer_id_t t , timer_mode_t mode,timer_top_t top){
  * Magnitudes (uint32_t is enough, no overflow):
  *   ticks_per_ms * ms <= 16000 * 4194 = 67.1e6 < 4.29e9
  */
-static status_t timer_set_frequency(timer_id_t t,uint16_t ms, uint16_t * out_top){
+static status_t timer_set_top(timer_id_t t,uint16_t ms, uint16_t * out_top){
   status_t stat = check_ready(t);
   if(stat != STATUS_OK) return stat;
 
@@ -377,6 +377,10 @@ static status_t timer_set_frequency(timer_id_t t,uint16_t ms, uint16_t * out_top
   *out_top = (uint16_t)(counts-1);
 
   return STATUS_OK;
+}
+
+timer_set_frequency(timer_id_t,uint32_t hz,uint32_t *actual_hz){
+
 }
 
 status_t timer_start(timer_id_t t, uint16_t prescaler){

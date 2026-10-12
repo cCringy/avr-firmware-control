@@ -88,5 +88,5 @@ typedef enum:uint8_t{
 
 [[nodiscard]] status_t timer_set_channel(timer_id_t, timer_channel_t,timer_com_t);
 [[nodiscard]] status_t timer_set_mode(timer_id_t,timer_mode_t,timer_top_t);
-
+[[nodiscard]] status_t timer_set_frequency(timer_id_t, uint32_t hz,uint32_t *actual_hz);
 #endif
