@@ -246,10 +246,6 @@ static uint16_t reg_read(const HAL_FLASH timer_desc_t *d,volatile uint8_t *reg){
   return *reg;
 }
 
-static bool timer_is_in_use(t){
-  return state[t].in_use;
-}
-
 status_t timer_init(timer_id_t t){
   
   if(HAL_TIMER_COUNT <= t) return STATUS_ERR_PARAM;
@@ -275,7 +271,7 @@ status_t timer_init(timer_id_t t){
 
 status_t timer_deinit(timer_id_t t){
   if(t>= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
-  if(t>=!state[t].in_use) return STATUS_ERR_STATE;
+  if(!state[t].in_use) return STATUS_ERR_STATE;
 
   const HAL_FLASH timer_desc_t *d = &timers[t];
 
@@ -287,9 +283,9 @@ status_t timer_deinit(timer_id_t t){
   *d->focr  = 0;
   *d->tifr  = 0xFF;
 
-  cb[t][i] = nullptr; // TODO
+  if(t == HAL_TIMER_1) cb = nullptr; // TODO: per-timer/per-IRQ callbacks
 
-  power_enable(d->prr_mask);
+  power_disable(d->prr_mask);
 
   state[t] = (timer_state_t){0};
 
@@ -379,8 +375,93 @@ static status_t timer_set_top(timer_id_t t,uint16_t ms, uint16_t * out_top){
   return STATUS_OK;
 }
 
-timer_set_frequency(timer_id_t,uint32_t hz,uint32_t *actual_hz){
+status_t timer_set_frequency(timer_id_t t, uint32_t hz, uint32_t *actual_hz){
+  status_t s;
+  if(s = checkready(t)) return s;
+  const HAL_FLASH timer_desc_t * d = &timers[t];
+  calc_pre_and_top();
+  return STATUS_ERR_UNSUPPORTED; // TODO
+}
+/**
+ * @brief  Picks the smallest prescaler N for which the requested period fits
+ *         into the timer, and computes the matching TOP value.
+ *
+ * Pure calculation: no registers are written, the timer is not started.
+ * Callers (timer_set_frequency, timer_set_period_ms) convert their input to
+ * CPU ticks first, write TOP via timer_set_top and only then the CS bits.
+ *
+ * Formulas (ATmega328P datasheet, timer chapters, mode descriptions):
+ *
+ *   CTC / Fast PWM        f = F_CPU / (N * (TOP + 1))     counts 0..TOP
+ *   Phase (+Freq) Correct f = F_CPU / (2 * N * TOP)       counts 0..TOP..0
+ *
+ * With cpu_ticks = F_CPU / f (CPU clocks per period):
+ *
+ *   div    = N          (CTC / Fast PWM)
+ *          = 2 * N      (Phase Correct / Phase+Freq Correct)
+ *   counts = round(cpu_ticks / div) = (cpu_ticks + div/2) / div
+ *   TOP    = counts - 1 (CTC / Fast PWM)
+ *          = counts     (Phase Correct / Phase+Freq Correct)
+ *
+ * A prescaler fits if 1 <= TOP <= d->top_max (counts >= 2).
+ * The smallest fitting N is chosen because it gives the largest TOP and
+ * therefore the finest frequency / duty-cycle resolution.
+ *
+ * Examples (F_CPU = 16 MHz):
+ *   Timer0, CTC,           1 kHz -> cpu_ticks 16000,  N 64, TOP 249
+ *   Timer1, CTC,           1 kHz -> cpu_ticks 16000,  N 1,  TOP 15999
+ *   Timer1, Phase Correct, 50 Hz -> cpu_ticks 320000, N 8,  TOP 20000
+ *
+ * Overflow: div <= 2 * 1024, cpu_ticks + div/2 stays far below 2^32
+ * for every cpu_ticks a uint32_t caller can produce from F_CPU.
+ *
+ * @param d          Timer descriptor (flash)
+ * @param wgm        Active WGM index (state[t].wgm), selects the mode
+ * @param cpu_ticks  Requested period in CPU clock cycles (F_CPU / f)
+ * @param pre_idx    [out] Index into d->pre_val / d->pre_bits
+ * @param top        [out] TOP value for OCRnA or ICR1
+ *
+ * @retval STATUS_OK         pre_idx and top are valid
+ * @retval STATUS_ERR_PARAM  NULL pointer, or no prescaler fits
+ *                           (frequency too high or too low for this timer)
+ * @retval STATUS_ERR_STATE  Mode has a fixed TOP (Normal mode); only the
+ *                           prescaler can be chosen there
+ *
+ * @note Outputs are only written on STATUS_OK.
+ */
+static status_t calc_pre_top(const HAL_FLASH timer_desc_t *d, uint8_t wgm,
+                             uint32_t cpu_ticks, uint8_t *pre_idx, uint16_t *top){
 
+  if (!pre_idx || !top) return STATUS_ERR_PARAM;
+
+  const timer_mode_t mode = d->timer_mode_table[wgm].mode;
+  bool dual_slope;
+  
+  if (mode == TIMER_MODE_CTC || mode == TIMER_MODE_FAST_PWM) {
+    dual_slope = false;
+  } else if (mode == TIMER_MODE_PHASE_CORRECT_PWM ||
+             mode == TIMER_MODE_PHASE_FREQ_CORRECT_PWM) {
+    dual_slope = true;
+  } else {
+    return STATUS_ERR_STATE;            // Normal Mode: TOP is constant
+  }
+
+  for(uint8_t i = 0; i < d->pre_count;i++){
+    uint32_t div =  d->pre_val[i] * (dual_slope ? 2u : 1u);
+
+    uint32_t counts = (cpu_ticks + div / 2) / div;
+
+    // CTC/Fast PWM: top = counts - 1,  Phase Correct: top = counts
+    uint32_t t = dual_slope ? counts:counts-1;
+
+    if(counts >= 2 && t <= d->top_max){
+      *pre_idx = 1;
+      *top = (uint16_t) t;
+      return STATUS_OK;
+    }
+  }
+
+  return STATUS_ERR_PARAM;
 }
 
 status_t timer_start(timer_id_t t, uint16_t prescaler){
