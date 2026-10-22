@@ -56,7 +56,7 @@ typedef struct TimerDescriptor {
   const HAL_FLASH uint8_t    *pre_bits;
   uint8_t                     pre_count;
 
-  // WGM-Tabelle, Index = WGM-Wert
+  // WGM table , index = WGM-value
   const HAL_FLASH wgm_mode_t *timer_mode_table;
   uint8_t                     timer_mode_table_count;
 
@@ -65,9 +65,10 @@ typedef struct TimerDescriptor {
 
 typedef struct {
   bool    in_use;
-  bool    suspended;    // PRR-Bit gesetzt, Register nicht zugreifbar
-  uint8_t wgm;          // aktuell gesetzter WGM-Index
-  uint8_t prev_presc;   // zuletzt gewählter Prescaler-Index
+  bool    suspended;    // PRR-Bit set, Register not accessible
+  uint8_t wgm;          // current wgm value
+  uint8_t prev_presc;   // last selected prescaler
+  uint16_t top;         // last TOP written by timer_set_frequency
 } timer_state_t;
 
 static_assert(sizeof(wgm_mode_t) == 2, "enum : uint8_t needs to work");
@@ -270,7 +271,7 @@ status_t timer_init(timer_id_t t){
 }
 
 status_t timer_deinit(timer_id_t t){
-  if(t>= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
+  if(t >= HAL_TIMER_COUNT) return STATUS_ERR_PARAM;
   if(!state[t].in_use) return STATUS_ERR_STATE;
 
   const HAL_FLASH timer_desc_t *d = &timers[t];
@@ -313,75 +314,46 @@ status_t timer_set_mode(timer_id_t t , timer_mode_t mode,timer_top_t top){
 
   return  STATUS_ERR_UNSUPPORTED;
 }
+
 /**
- * Picks the smallest prescaler for which the requested period fits into the
- * timer's counter, writes the CS bits (this starts the timer) and returns TOP.
+ * @brief  Writes TOP into the register the active WGM mode uses as TOP source
+ *         (OCRnA or ICR1). Does not touch the CS bits.
  *
- * Formulas (CTC mode, compare-match interrupt once per period):
- *
- *   f_int    = F_CPU / (pre * (TOP + 1))          // datasheet, CTC mode
- *   T        = (pre * (TOP + 1)) / F_CPU          // period in seconds
- *   counts   = TOP + 1 = T * F_CPU / pre
- *
- * With T in milliseconds, avoiding float:
- *
- *   ticks_per_ms = F_CPU / 1000                   // timer ticks per ms at pre = 1
- *   counts       = ticks_per_ms * ms / pre
- *   TOP          = counts - 1
- *
- * Rounding to the nearest integer without float:
- *
- *   round(a / b) = (a + b/2) / b                  // for unsigned a, b
- *
- * Constraint: counts <= top_max + 1               // 256 (T0/T2) or 65536 (T1)
- *
- * Longest period (largest prescaler, full counter):
- *
- *   max_ms = (top_max + 1) * pre_max / ticks_per_ms
- *          = 65536 * 1024 / 16000 = 4194 ms (Timer1, 16 MHz)
- *          = 256   * 1024 / 16000 = 16 ms   (Timer0/2, 16 MHz)
- *
- * Magnitudes (uint32_t is enough, no overflow):
- *   ticks_per_ms * ms <= 16000 * 4194 = 67.1e6 < 4.29e9
+ * @retval STATUS_ERR_PARAM  top == 0 or top > d->top_max
+ * @retval STATUS_ERR_STATE  Mode has a fixed TOP (Normal, 0x00FF, ...)
  */
-static status_t timer_set_top(timer_id_t t,uint16_t ms, uint16_t * out_top){
-  status_t stat = check_ready(t);
-  if(stat != STATUS_OK) return stat;
-
-  if(!out_top){return STATUS_ERR_PARAM;}
-
+static status_t timer_set_top(timer_id_t t, uint16_t top){
   const HAL_FLASH timer_desc_t *d = &timers[t];
+  if(top == 0 || top > d->top_max) return STATUS_ERR_PARAM;
 
-  const uint32_t ticks_per_ms = F_CPU/1000UL;
-  const uint32_t max_counts   = (uint32_t)d->top_max + 1UL;
-  const uint32_t max_ms       = (max_counts * d->pre_val[d->pre_count-1]) / ticks_per_ms;
-
-  if(ms == 0)     ms = 1;
-  if(ms > max_ms) ms = (uint16_t) max_ms;
-
-  uint8_t i = 0;
-  uint32_t counts = 0;
-
-  for(; i < d->pre_count;i++){
-    counts = (ticks_per_ms * ms + d->pre_val[i] / 2) / d->pre_val[i];
-    if(counts <= max_counts) break;
+  switch(d->timer_mode_table[state[t].wgm].top_value){
+    case TIMER_TOP_OCRA:
+      reg_write(d, d->ocra, top);
+      return STATUS_OK;
+    case TIMER_TOP_ICR1:
+      if(!(d->caps & TIMER_CAP_ICR)) return STATUS_ERR_UNSUPPORTED;
+      reg_write(d, (volatile uint8_t *)&ICR1, top);
+      return STATUS_OK;
+    default:
+      return STATUS_ERR_STATE;
   }
-  if( i == d->pre_count) {i =  d->pre_count-1; counts = max_counts;}
-  if(counts == 0) counts = 1;
+}
 
-  *d->tccrb = (uint8_t)(*d->tccrb & (uint8_t)~d->cs_mask) | d->pre_bits[i];
-  *out_top = (uint16_t)(counts-1);
+/** Single vs. dual slope for the WGM mode; STATUS_ERR_STATE for Normal (fixed TOP). */
+static status_t mode_slope(const HAL_FLASH timer_desc_t *d, uint8_t wgm, bool *dual_slope){
+  const timer_mode_t mode = d->timer_mode_table[wgm].mode;
 
+  if (mode == TIMER_MODE_CTC || mode == TIMER_MODE_FAST_PWM) {
+    *dual_slope = false;
+  } else if (mode == TIMER_MODE_PHASE_CORRECT_PWM ||
+             mode == TIMER_MODE_PHASE_FREQ_CORRECT_PWM) {
+    *dual_slope = true;
+  } else {
+    return STATUS_ERR_STATE;
+  }
   return STATUS_OK;
 }
 
-status_t timer_set_frequency(timer_id_t t, uint32_t hz, uint32_t *actual_hz){
-  status_t s;
-  if(s = checkready(t)) return s;
-  const HAL_FLASH timer_desc_t * d = &timers[t];
-  calc_pre_and_top();
-  return STATUS_ERR_UNSUPPORTED; // TODO
-}
 /**
  * @brief  Picks the smallest prescaler N for which the requested period fits
  *         into the timer, and computes the matching TOP value.
@@ -434,28 +406,25 @@ static status_t calc_pre_top(const HAL_FLASH timer_desc_t *d, uint8_t wgm,
 
   if (!pre_idx || !top) return STATUS_ERR_PARAM;
 
-  const timer_mode_t mode = d->timer_mode_table[wgm].mode;
   bool dual_slope;
-  
-  if (mode == TIMER_MODE_CTC || mode == TIMER_MODE_FAST_PWM) {
-    dual_slope = false;
-  } else if (mode == TIMER_MODE_PHASE_CORRECT_PWM ||
-             mode == TIMER_MODE_PHASE_FREQ_CORRECT_PWM) {
-    dual_slope = true;
-  } else {
-    return STATUS_ERR_STATE;            // Normal Mode: TOP is constant
-  }
+  status_t s = mode_slope(d, wgm, &dual_slope);
+  if (s != STATUS_OK) return s;
 
   for(uint8_t i = 0; i < d->pre_count;i++){
-    uint32_t div =  d->pre_val[i] * (dual_slope ? 2u : 1u);
+    uint32_t div = (uint32_t) d->pre_val[i] * (dual_slope ? 2u : 1u);
 
     uint32_t counts = (cpu_ticks + div / 2) / div;
 
     // CTC/Fast PWM: top = counts - 1,  Phase Correct: top = counts
-    uint32_t t = dual_slope ? counts:counts-1;
+    uint32_t t;
+    if (counts >= 2){
+      t = dual_slope ? counts:counts-1;
+    }else{
+      t = counts;
+    }
 
     if(counts >= 2 && t <= d->top_max){
-      *pre_idx = 1;
+      *pre_idx = i;
       *top = (uint16_t) t;
       return STATUS_OK;
     }
@@ -464,21 +433,44 @@ static status_t calc_pre_top(const HAL_FLASH timer_desc_t *d, uint8_t wgm,
   return STATUS_ERR_PARAM;
 }
 
+status_t timer_set_frequency(timer_id_t t, uint32_t hz, uint32_t *actual_hz){
+  status_t s = check_ready(t);
+  if (s != STATUS_OK) return s;
+  if (hz == 0 || !actual_hz) return STATUS_ERR_PARAM;
+
+  const HAL_FLASH timer_desc_t *d = &timers[t];
+  const uint8_t wgm = state[t].wgm;
+
+  uint8_t  pre_idx;
+  uint16_t top;
+  s = calc_pre_top(d, wgm, F_CPU / hz, &pre_idx, &top);
+  if (s != STATUS_OK) return s;
+
+  bool dual_slope;
+  s = mode_slope(d, wgm, &dual_slope);
+  if (s != STATUS_OK) return s;
+
+  s = timer_set_top(t, top);
+  if (s != STATUS_OK) return s;
+
+  state[t].top        = top;
+  state[t].prev_presc = pre_idx; 
+
+  const uint32_t n = d->pre_val[pre_idx];
+  *actual_hz = dual_slope ? F_CPU / (2u * n * top)
+                          : F_CPU / (n * ((uint32_t)top + 1u));
+  return STATUS_OK;
+}
+
 status_t timer_start(timer_id_t t, uint16_t prescaler){
   status_t stat = check_ready(t);
   if(stat != STATUS_OK) return stat;
 
   const HAL_FLASH timer_desc_t * d = &timers[t];
 
-  for(uint8_t i = 0 ; i < d->pre_count ; i++){
-    if(d->pre_val[i] == prescaler){
-      *d->tccrb = (uint8_t)((*d->tccrb & (uint8_t)~d->cs_mask) | d->pre_bits[i]);
-      state[t].prev_presc = i;
-      return STATUS_OK;
-    }
-  }
+  *d->tccrb = (uint8_t)((*d->tccrb & (uint8_t)~d->cs_mask) | d->pre_bits[state[t].prev_presc]);
 
-  return STATUS_ERR_PARAM;
+  return STATUS_OK;
 }
 status_t timer_stop(timer_id_t t){
   status_t stat = check_ready(t);

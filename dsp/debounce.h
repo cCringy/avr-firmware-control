@@ -3,6 +3,6 @@
 
 #include "../hal/gpio.h"
 
-uint8_t debounce(gpio_port_t port, gpio_pin_t pin);
+uint8_t debounce(gpio_id_t);
 
 #endif /* DEBOUNCE_H_ */
