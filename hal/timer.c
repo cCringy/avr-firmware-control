@@ -511,21 +511,35 @@ status_t timer_resume(timer_id_t t){
 }
 
 status_t timer_set_channel(timer_id_t t, timer_channel_t channel,timer_com_t com){
-  const HAL_FLASH timer_desc_t * d = &timers[t];
-  
   status_t s = check_ready(t);
   if (s != STATUS_OK) return s;
   if (channel > TIMER_CH_B || com > TIMER_COM_SET) return STATUS_ERR_PARAM;
 
+  const HAL_FLASH timer_desc_t * d = &timers[t];
   const uint8_t shift = (channel == TIMER_CH_A) ? 6 : 4;
-
+  timer_mode_t mode =  d->timer_mode_table[state[t].wgm].mode;
+  const bool pwm = mode == TIMER_MODE_FAST_PWM || mode == TIMER_MODE_PHASE_CORRECT_PWM
+              || mode == TIMER_MODE_PHASE_FREQ_CORRECT_PWM;
+  if (channel == TIMER_CH_B && com == TIMER_COM_TOGGLE && pwm) return STATUS_ERR_PARAM;
   // Pin first, so it does not glitch the wrong way once the OC unit takes over
-  s = GPIO_set_output(d->oc_pin[channel]);   // check the real signature in gpio.h
-  if (s != STATUS_OK) return s;
+  if(com != TIMER_COM_DISCONNECTED){
+    s = GPIO_set_output(d->oc_pin[channel]);   // check the real signature in gpio.h
+    if (s != STATUS_OK) return s;
+  }
 
   *d->tccra = (uint8_t)((*d->tccra & ~(0x03u << shift)) | ((uint8_t)com << shift));
   return STATUS_OK;
 } 
+
+status_t timer_set_duty(timer_id_t t, timer_channel_t ch, uint16_t value){
+  status_t s = check_ready(t);
+  if (s != STATUS_OK) return s;
+  if (ch > TIMER_CH_B || value > state[t].top) return STATUS_ERR_PARAM;
+  const HAL_FLASH timer_desc_t *d = &timers[t];
+  reg_write(d, ch == TIMER_CH_A ? d->ocra : d->ocrb, value); // Signatur prüfen
+  return STATUS_OK;
+}
+
 ISR(TIMER1_COMPA_vect) {
   timer_callback_t f = cb;
   if (f != nullptr) f();
