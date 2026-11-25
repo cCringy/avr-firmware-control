@@ -4,6 +4,7 @@
 #include "gpio.h"
 #include <stdint.h>
 #include <avr/io.h>
+#include <stdbool.h>
 #include <avr/interrupt.h>
 #include <util/atomic.h>
 
@@ -308,6 +309,15 @@ status_t timer_set_mode(timer_id_t t , timer_mode_t mode,timer_top_t top){
     if(d->timer_mode_table[wgm].mode == mode &&d->timer_mode_table[wgm].top_value == top){
       write_wgm(d,wgm);
       state[t].wgm=wgm;
+      // Fixed-TOP modes: TOP is known now. OCRnA/ICR1 modes: 0 = unknown until
+      // timer_set_frequency writes it (also clears a stale TOP from the previous mode).
+      switch(top){
+        case TIMER_TOP_0X00FF: state[t].top = 0x00FF; break;
+        case TIMER_TOP_0X01FF: state[t].top = 0x01FF; break;
+        case TIMER_TOP_0X03FF: state[t].top = 0x03FF; break;
+        case TIMER_TOP_MAX:    state[t].top = d->top_max; break;
+        default:               state[t].top = 0; break;
+      }
       return STATUS_OK;
     }
   }
@@ -534,7 +544,9 @@ status_t timer_set_channel(timer_id_t t, timer_channel_t channel,timer_com_t com
 status_t timer_set_duty(timer_id_t t, timer_channel_t ch, uint16_t value){
   status_t s = check_ready(t);
   if (s != STATUS_OK) return s;
-  if (ch > TIMER_CH_B || value > state[t].top) return STATUS_ERR_PARAM;
+  if (ch > TIMER_CH_B) return STATUS_ERR_PARAM;
+  if (state[t].top == 0) return STATUS_ERR_STATE;   // TOP not set yet: call timer_set_frequency first
+  if (value > state[t].top) return STATUS_ERR_PARAM;
   const HAL_FLASH timer_desc_t *d = &timers[t];
   reg_write(d, ch == TIMER_CH_A ? d->ocra : d->ocrb, value); // Signatur prüfen
   return STATUS_OK;
