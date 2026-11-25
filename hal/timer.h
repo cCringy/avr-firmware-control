@@ -3,6 +3,7 @@
 
 #include "status.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 // Clock Sources
 
@@ -85,6 +86,8 @@ typedef enum:uint8_t{
 
 [[nodiscard]] status_t timer_start(timer_id_t ,uint16_t prescaler);
 [[nodiscard]] status_t timer_stop(timer_id_t);
+[[nodiscard]] status_t timer_suspend(timer_id_t);
+[[nodiscard]] status_t timer_resume(timer_id_t);
 
 [[nodiscard]] status_t timer_set_channel(timer_id_t, timer_channel_t,timer_com_t);
 [[nodiscard]] status_t timer_set_mode(timer_id_t,timer_mode_t,timer_top_t);
